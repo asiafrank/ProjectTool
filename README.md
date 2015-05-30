@@ -1,2 +1,5 @@
 # ProjectTool
-A springmvc-mybatis-freemarker project generator.
+>A springmvc-mybatis-freemarker project generator.  
+>Produced by jianfeng hong.
+
+
