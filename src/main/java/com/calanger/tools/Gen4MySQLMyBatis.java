@@ -24,9 +24,12 @@ public class Gen4MySQLMyBatis {
         if (jdbcTemplate == null) {
             DriverManagerDataSource dataSource = new DriverManagerDataSource();
             dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-            dataSource.setUrl("jdbc:mysql://localhost:3306/asiafrank?useUnicode=true&characterEncoding=UTF-8");
-            dataSource.setUsername("root");
-            dataSource.setPassword("root");
+            dataSource.setUrl("jdbc:mysql://localhost:3306/web?useUnicode=true&characterEncoding=UTF-8");
+            dataSource.setUsername("foreverknown");
+            dataSource.setPassword("flzx3000cysyhl9t");
+            /*dataSource.setUrl("jdbc:mysql://120.26.197.237:3306/p2p?useUnicode=true&characterEncoding=UTF-8");
+            dataSource.setUsername("p2p");
+            dataSource.setPassword("123456");*/
 
             jdbcTemplate = new JdbcTemplate(dataSource);
         }
@@ -36,16 +39,15 @@ public class Gen4MySQLMyBatis {
 
     @SuppressWarnings("unchecked")
     public static void main(String[] args) throws Exception {
-        final String baseDirName = "E:/workspace/frank";
-        final String basePackageName = "com.calanger";
-        final String projectName = "blog";
-        final String tablePrefix = "";
+        // /Users/asiafrank/workspace/enterprise/p2p
+        final String baseDirName = "/Users/asiafrank/workspace/personal/test-web";
+        final String basePackageName = "com.asiafrank";
+        final String projectName = "web";
+        final String tablePrefix = "w_";
         final String[] tableNames = {
-//                "ot_stock_index"
-                "article",
-                "user"
+                "w_coin"
         };
-        final String schema = "fcj";
+        final String schema = "web";
 
         String coreBaseDirName = baseDirName + "/" + projectName + "-core";
 

@@ -101,9 +101,9 @@
       <version>1.4</version>
     </dependency>
     <dependency>
-    	<groupId>org.freemarker</groupId>
-    	<artifactId>freemarker</artifactId>
-    	<version>2.3.15</version>
+        <groupId>org.freemarker</groupId>
+        <artifactId>freemarker</artifactId>
+        <version>2.3.15</version>
     </dependency>
   </dependencies>
 </project>

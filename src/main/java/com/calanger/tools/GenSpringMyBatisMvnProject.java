@@ -14,9 +14,9 @@ public class GenSpringMyBatisMvnProject {
     private static final String DEFAULT_DATABASE = "mysql";
 
     public static void main(String[] args) throws Exception {
-        String baseDirName = "E:/workspace/frank";
+        String baseDirName = "/Users/asiafrank/workspace/personal/respite";
         String basePackageName = "com.calanger";
-        String projectName = "blog";
+        String projectName = "respite";
 
         Configuration configuration = new Configuration();
         configuration.setDefaultEncoding(DEFAULT_CHARSET);

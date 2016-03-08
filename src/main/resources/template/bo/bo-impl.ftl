@@ -3,8 +3,8 @@ package ${basePackageName}.${projectName}.bo.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ${basePackageName}.common.bo.AbstractBO;
-import ${basePackageName}.common.dao.DAO;
+import com.calanger.common.bo.AbstractBO;
+import com.calanger.common.dao.DAO;
 import ${basePackageName}.${projectName}.bo.${modelClassSimpleName}BO;
 import ${basePackageName}.${projectName}.dao.${modelClassSimpleName}DAO;
 import ${basePackageName}.${projectName}.model.${modelClassSimpleName};

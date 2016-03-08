@@ -3,8 +3,8 @@ package ${basePackageName}.${projectName}.vo;
 import java.util.ArrayList;
 import java.util.List;
 
-import ${basePackageName}.common.dao.Expression;
-import ${basePackageName}.common.dao.ExpressionChain;
+import com.calanger.common.dao.Expression;
+import com.calanger.common.dao.ExpressionChain;
 import ${basePackageName}.${projectName}.model.${modelClassSimpleName};
 
 public class ${modelClassSimpleName}VO extends ${modelClassSimpleName} {

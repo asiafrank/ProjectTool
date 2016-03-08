@@ -1,6 +1,6 @@
 package ${basePackageName}.${projectName}.dao;
 
-import ${basePackageName}.common.dao.DAO;
+import com.calanger.common.dao.DAO;
 import ${basePackageName}.${projectName}.model.${modelClassSimpleName};
 import ${basePackageName}.${projectName}.vo.${modelClassSimpleName}VO;
 
