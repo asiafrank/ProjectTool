@@ -24,30 +24,23 @@ public class Gen4MySQLMyBatis {
         if (jdbcTemplate == null) {
             DriverManagerDataSource dataSource = new DriverManagerDataSource();
             dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-            dataSource.setUrl("jdbc:mysql://localhost:3306/web?useUnicode=true&characterEncoding=UTF-8");
-            dataSource.setUsername("foreverknown");
-            dataSource.setPassword("flzx3000cysyhl9t");
-            /*dataSource.setUrl("jdbc:mysql://120.26.197.237:3306/p2p?useUnicode=true&characterEncoding=UTF-8");
-            dataSource.setUsername("p2p");
-            dataSource.setPassword("123456");*/
+            dataSource.setUrl("jdbc:mysql://localhost:3306/lailc?useUnicode=true&characterEncoding=UTF-8");
+            dataSource.setUsername("");
+            dataSource.setPassword("");
 
             jdbcTemplate = new JdbcTemplate(dataSource);
         }
-
         return jdbcTemplate;
     }
 
     @SuppressWarnings("unchecked")
     public static void main(String[] args) throws Exception {
-        // /Users/asiafrank/workspace/enterprise/p2p
-        final String baseDirName = "/Users/asiafrank/workspace/personal/test-web";
-        final String basePackageName = "com.asiafrank";
-        final String projectName = "web";
-        final String tablePrefix = "w_";
-        final String[] tableNames = {
-                "w_coin"
-        };
-        final String schema = "web";
+        final String baseDirName = "";
+        final String basePackageName = "com.calanger";
+        final String projectName = "";
+        final String tablePrefix = "";
+        final String[] tableNames = {""};
+        final String schema = "";
 
         String coreBaseDirName = baseDirName + "/" + projectName + "-core";
 
