@@ -1,7 +1,5 @@
 package com.calanger.tools.util;
 
-import com.calanger.tools.util.PropertyNameUtils;
-
 import junit.framework.TestCase;
 
 public class PropertyNameUtilsTest extends TestCase {

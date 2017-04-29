@@ -1,5 +1,6 @@
 package com.calanger.tools;
 
+import com.calanger.tools.constant.DB;
 import com.calanger.tools.util.DirUtils;
 import com.calanger.tools.util.GenerateUtils;
 import com.raddle.jdbc.JdbcTemplate;
@@ -17,16 +18,20 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
 
-public class Gen4MySQLMyBatis {
+public class CoreGenerator {
     private static JdbcTemplate jdbcTemplate;
+
+    private static DB db = DB.MYSQL;
 
     public static JdbcTemplate getJdbcTemplate() {
         if (jdbcTemplate == null) {
             DriverManagerDataSource dataSource = new DriverManagerDataSource();
-            dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-            dataSource.setUrl("jdbc:mysql://localhost:3306/lailc?useUnicode=true&characterEncoding=UTF-8");
-            dataSource.setUsername("");
-            dataSource.setPassword("");
+//            dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+            dataSource.setDriverClassName("org.postgresql.Driver");
+//            dataSource.setUrl("jdbc:mysql://localhost:3306/discovery?useUnicode=true&characterEncoding=UTF-8");
+            dataSource.setUrl("jdbc:postgresql://localhost/sample");
+            dataSource.setUsername("postgres");
+            dataSource.setPassword("postgres");
 
             jdbcTemplate = new JdbcTemplate(dataSource);
         }
@@ -36,7 +41,7 @@ public class Gen4MySQLMyBatis {
     @SuppressWarnings("unchecked")
     public static void main(String[] args) throws Exception {
         final String baseDirName = "";
-        final String basePackageName = "com.calanger";
+        final String basePackageName = "";
         final String projectName = "";
         final String tablePrefix = "";
         final String[] tableNames = {""};
@@ -76,7 +81,7 @@ public class Gen4MySQLMyBatis {
 
         Configuration configuration = new Configuration();
         configuration.setDefaultEncoding("utf-8");
-        configuration.setTemplateLoader(new ClassTemplateLoader(Gen4MySQLMyBatis.class, "/"));
+        configuration.setTemplateLoader(new ClassTemplateLoader(CoreGenerator.class, "/"));
         configuration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
 
         for (TableInfo tableInfo : tableInfoList) {
@@ -249,7 +254,7 @@ public class Gen4MySQLMyBatis {
         String prefix = tablePrefix.toLowerCase();
 
         if (!name.startsWith(prefix)) {
-            throw new RuntimeException("表名前缀不正确");
+            throw new RuntimeException("prefix of table incorrect");
         }
 
         name = name.substring(prefix.length());

@@ -9,18 +9,21 @@ import freemarker.template.TemplateExceptionHandler;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GenSpringMyBatisMvnProject {
+/**
+ * Only generate spring-boot project
+ */
+public class MvnProjectGenerator {
     private static final String DEFAULT_CHARSET = "UTF-8";
     private static final String DEFAULT_DATABASE = "mysql";
 
     public static void main(String[] args) throws Exception {
         String baseDirName = "";
-        String basePackageName = "com.calanger";
+        String basePackageName = "";
         String projectName = "";
 
         Configuration configuration = new Configuration();
         configuration.setDefaultEncoding(DEFAULT_CHARSET);
-        configuration.setTemplateLoader(new ClassTemplateLoader(GenSpringMyBatisMvnProject.class, "/"));
+        configuration.setTemplateLoader(new ClassTemplateLoader(MvnProjectGenerator.class, "/"));
         configuration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
 
         Map<Object, Object> context = new HashMap<Object, Object>();
