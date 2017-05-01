@@ -1,6 +1,6 @@
 package ${basePackageName}.${projectName}.bo;
 
-import com.calanger.common.bo.BO;
+import ${basePackageName}.${projectName}.base.BO;
 import ${basePackageName}.${projectName}.model.${modelClassSimpleName};
 import ${basePackageName}.${projectName}.vo.${modelClassSimpleName}VO;
 

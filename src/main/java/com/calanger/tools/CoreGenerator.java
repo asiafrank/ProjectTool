@@ -117,6 +117,8 @@ public class CoreGenerator {
         return sb.toString();
     }
 
+
+//    https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-reference-type-conversions.html
     private static Map<Object, Object> getContext(String basePackageName, String projectName, String tablePrefix, TableInfo tableInfo) {
         String tableName = tableInfo.getTableName().toLowerCase();
 

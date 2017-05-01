@@ -1,0 +1,1 @@
+java -cp config -jar lib/${projectName}-service-1.0-SNAPSHOT.jar

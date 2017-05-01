@@ -4,7 +4,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.calanger.common.dao.AbstractDAO;
+import ${basePackageName}.${projectName}.base.AbstractDAO;
 import ${basePackageName}.${projectName}.dao.${modelClassSimpleName}DAO;
 import ${basePackageName}.${projectName}.model.${modelClassSimpleName};
 import ${basePackageName}.${projectName}.vo.${modelClassSimpleName}VO;

@@ -11,7 +11,6 @@
   <build>
     <defaultGoal>package</defaultGoal>
     <plugins>
-      <!-- compiler插件，设定JDK版本及编码 -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -78,18 +77,12 @@
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
-      <version>5.1.6</version>
+      <version>6.0.6</version>
     </dependency>
-
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
       <version>9.4.1212</version>
-    </dependency>
-    <dependency>
-      <groupId>com.oracle</groupId>
-      <artifactId>ojdbc14</artifactId>
-      <version>10.2.0.4</version>
     </dependency>
     <dependency>
       <groupId>commons-lang</groupId>
