@@ -7,8 +7,8 @@
 <configuration>
   <mappers>
     <!--
-    <mapper resource="mybatis/base/mapper-table_name.xml" />
-    <mapper resource="mybatis/extension/mapper-table_name.xml" />
+    <mapper resource="mapper/table_name.xml" />
+    <mapper resource="mapper/extension/table_name.xml" />
     -->
   </mappers>
 </configuration>

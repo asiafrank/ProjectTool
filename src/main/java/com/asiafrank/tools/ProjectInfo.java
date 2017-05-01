@@ -33,6 +33,9 @@ public class ProjectInfo {
     private final String coreBODir;
     private final String coreBOImplDir;
 
+    private final String coreMybatisMapperDir;
+    private final String coreMybatisMapperExtensionDir;
+
     private final String serviceBaseDir;
     private final String servicePackageDir;
     private final String serviceResourcesDir;
@@ -60,6 +63,9 @@ public class ProjectInfo {
         this.coreDAOImplDir = corePackageDir + sp + "dao/impl";
         this.coreBODir = corePackageDir + sp + "bo";
         this.coreBOImplDir = corePackageDir + sp + "bo/impl";
+
+        this.coreMybatisMapperDir = coreResourcesDir + sp + "mapper";
+        this.coreMybatisMapperExtensionDir = coreMybatisMapperDir + sp + "extension";
 
         this.serviceBaseDir = baseDir + sp + projectName + "-service";
         this.servicePackageDir = serviceBaseDir + java + sp + packageDir + sp + "service";
@@ -133,6 +139,14 @@ public class ProjectInfo {
 
     public String getCoreBOImplDir() {
         return coreBOImplDir;
+    }
+
+    public String getCoreMybatisMapperDir() {
+        return coreMybatisMapperDir;
+    }
+
+    public String getCoreMybatisMapperExtensionDir() {
+        return coreMybatisMapperExtensionDir;
     }
 
     public char getSp() {

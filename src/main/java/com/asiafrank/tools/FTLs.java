@@ -22,7 +22,6 @@ public class FTLs {
     public static final String config_application = "template/config/application.properties.ftl";
 
     public static final String dao_dao = "template/dao/dao.ftl";
-    public static final String dao_dao_impl = "template/dao/dao-impl.ftl";
 
     public static final String model_model = "template/model/model.ftl";
 
