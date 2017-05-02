@@ -163,6 +163,7 @@ public class CoreGenerator extends Generator {
 
             propertyNameList.add(getPropertyName(columnInfo.getColumnName()));
 
+            // use com.mysql.cj.core.MySqlType JDBCType Types
             if ("char".equalsIgnoreCase(columnTypeName)) {
                 columnTypeList.add("CHAR");
             } else if ("varchar".equalsIgnoreCase(columnTypeName)) {
@@ -263,7 +264,7 @@ public class CoreGenerator extends Generator {
     }
 
     private Map<Object, Object> getPostgreSQLContext(TableInfo info) {
-        // TODO:
+        // TODO: use TypeInfoCache JDBCType Types
         return null;
     }
 
