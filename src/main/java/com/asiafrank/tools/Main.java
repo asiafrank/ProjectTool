@@ -5,7 +5,7 @@ package com.asiafrank.tools;
  */
 public class Main {
     public static void main(String[] args) {
-        MvnParam param = new MvnParam("/Users/asiafrank/workspace",
+        ProjectInfo info = new ProjectInfo("/Users/asiafrank/workspace",
                 "test", "com.asiafrank.test");
         DBParam dbParam = new DBParam(
                 "sample",
@@ -13,7 +13,7 @@ public class Main {
                 "root", DB.MYSQL, "", "",
                 new String[]{""});
 
-        MvnGenerator mg = new MvnGenerator(param, dbParam);
+        MvnGenerator mg = new MvnGenerator(info, dbParam);
         mg.exec();
     }
 }
