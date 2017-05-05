@@ -1,4 +1,6 @@
-package com.asiafrank.tools;
+package com.asiafrank.tools.core;
+
+import com.asiafrank.tools.util.DB;
 
 /**
  * @author asiafrank created at 1/5/2017.
@@ -45,8 +47,8 @@ public class DBParam {
         this.tableNames = tableNames;
 
         if (this.db == DB.MYSQL) {
-            this.driver = "com.mysql.jdbc.Driver";
-            this.url = "jdbc:mysql://localhost:3306/" + database + "?useUnicode=true&characterEncoding=UTF-8";
+            this.driver = "com.mysql.cj.jdbc.Driver";
+            this.url = "jdbc:mysql://localhost:3306/" + database + "?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC";
         } else {
             this.driver = "org.postgresql.Driver";
             this.url = "jdbc:postgresql://localhost/" + database;

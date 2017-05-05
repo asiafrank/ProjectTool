@@ -1,4 +1,4 @@
-package com.asiafrank.tools;
+package com.asiafrank.tools.core;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -11,7 +11,7 @@ import java.util.Map;
  * @author asiafrank created at 1/5/2017.
  */
 public abstract class Generator {
-    public abstract void exec();
+    public abstract void execute();
 
     static void mkdir(String dirName) {
         File dir = new File(dirName);

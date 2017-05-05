@@ -1,30 +1,33 @@
-package com.asiafrank.tools;
+package com.asiafrank.tools.core;
 
+import com.asiafrank.tools.ProjectInfo;
+import com.asiafrank.tools.util.*;
 import com.mysql.cj.core.MysqlType;
-import com.raddle.jdbc.JdbcTemplate;
-import com.raddle.jdbc.datasource.DriverManagerDataSource;
-import com.raddle.jdbc.meta.table.ColumnInfo;
-import com.raddle.jdbc.meta.table.TableInfo;
-import com.raddle.jdbc.meta.table.TableMetaHelper;
+import com.mysql.cj.jdbc.MysqlDataSource;
 import freemarker.cache.ClassTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateExceptionHandler;
 import org.apache.commons.lang.StringUtils;
+import org.postgresql.ds.PGSimpleDataSource;
 
-import java.sql.JDBCType;
+import javax.sql.DataSource;
+import java.sql.*;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * @author asiafrank created at 1/5/2017.
  */
 public class CoreGenerator extends Generator {
+    private static final Logger log = Logger.getGlobal();
+
     private final char sp;
 
     private final ProjectInfo project;
 
     private final DBParam param;
 
-    private final JdbcTemplate jdbcTemplate;
+    private final DataSource dataSource;
 
     private final Configuration ftlConfig;
 
@@ -32,13 +35,27 @@ public class CoreGenerator extends Generator {
         this.project = projectInfo;
         this.param = param;
 
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(param.getDriver());
-        dataSource.setUrl(param.getUrl());
-        dataSource.setUsername(param.getUsername());
-        dataSource.setPassword(param.getPassword());
+        if (DB.MYSQL == param.getDb()) {
+            try {
+                Class.forName(param.getDriver());
+            } catch (ClassNotFoundException ex) {
+                throw new IllegalArgumentException("Could not load mysql driver class [" + param.getDriver() + "]", ex);
+            }
 
-        jdbcTemplate = new JdbcTemplate(dataSource);
+            MysqlDataSource ds = new MysqlDataSource();
+            ds.setUrl(param.getUrl());
+            ds.setUser(param.getUsername());
+            ds.setPassword(param.getPassword());
+            this.dataSource = ds;
+        } else if (DB.POSTGRESQL == param.getDb()) {
+            PGSimpleDataSource ds = new PGSimpleDataSource();
+            ds.setUrl(param.getUrl());
+            ds.setUser(param.getUsername());
+            ds.setPassword(param.getPassword());
+            this.dataSource = ds;
+        } else {
+            throw new IllegalArgumentException("DB not support");
+        }
 
         if (Objects.isNull(config)) {
             Configuration configuration = new Configuration();
@@ -58,16 +75,14 @@ public class CoreGenerator extends Generator {
 
     @Override
     @SuppressWarnings("unchecked")
-    public void exec() {
+    public void execute() {
         mkCoreDir();
         mkMybatisConfig();
 
         final String[] tableNames = param.getTableNames();
         final String schema = param.getSchema();
-        List<TableInfo> tableInfoList = (List<TableInfo>) getJdbcTemplate().execute((conn)->{
-            TableMetaHelper metaHelper = new TableMetaHelper(conn);
-            return metaHelper.getTableInfo(tableNames, schema, new String[] { "TABLE" });
-        });
+        final String catalog = param.getDatabase();
+        List<TableInfo> tableInfoList = getTableInfo(tableNames, catalog, schema, new String[] { "TABLE" });
 
         if (DB.MYSQL == param.getDb())
             mkMySQLModel(tableInfoList);
@@ -100,21 +115,7 @@ public class CoreGenerator extends Generator {
     }
 
     private void mkPostgreSQLModel(List<TableInfo> tableInfoList) {
-        final String tablePrefix = param.getTablePrefix();
-        for (TableInfo info : tableInfoList) {
-            String tableName = info.getTableName().toLowerCase();
-            Map<Object, Object> context = getPostgreSQLContext(info);
-
-            String mapper = project.getCoreMybatisMapperDir() + sp + tableName + ".xml";
-            String model = project.getCoreModelDir() + sp + getModelClassSimpleName(tableName, tablePrefix) + ".java";
-            String vo = project.getCoreVODir() + sp + getModelClassSimpleName(tableName, tablePrefix) + "VO.java";
-            String dao = project.getCoreDAODir() + sp + getModelClassSimpleName(tableName, tablePrefix) + "DAO.java";
-            String daoImpl = project.getCoreDAOImplDir() + sp + "MyBatis" + getModelClassSimpleName(tableName, tablePrefix) + "DAO.java";
-            String bo = project.getCoreBODir() + sp + getModelClassSimpleName(tableName, tablePrefix) + "BO.java";
-            String boImpl = project.getCoreBOImplDir() + sp + "Default" + getModelClassSimpleName(tableName, tablePrefix) + "BO.java";
-
-            gen( mapper, FTLs.mybatis_mapper_postgresql, ftlConfig, context);
-        }
+        throw new UnsupportedOperationException();
     }
 
     private void mkMybatisConfig() {
@@ -273,16 +274,89 @@ public class CoreGenerator extends Generator {
         return StringUtils.uncapitalize(sb.toString());
     }
 
+    public List<TableInfo> getTableInfo(String[] tableNames, String catalog, String schema, String[] types) {
+        Connection connection = null;
+        try {
+            connection = dataSource.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        List<TableInfo> tableInfoList = new ArrayList<TableInfo>();
+        try {
+            if (Objects.isNull(types) || types.length == 0) {
+                types = new String[] { "TABLE" };
+            }
+            DatabaseMetaData dbMeta = connection.getMetaData();
+            if (Objects.isNull(tableNames)) {
+                ResultSet rs = connection.getMetaData().getTables(catalog, schema, "%", types);
+                fillTableInfo(tableInfoList, catalog, schema, dbMeta, rs);
+                CloseUtil.close(rs);
+            } else {
+                for (String tableName : tableNames) {
+                    ResultSet rs = connection.getMetaData().getTables(catalog, schema, tableName, types);
+                    fillTableInfo(tableInfoList, catalog, schema, dbMeta, rs);
+                    CloseUtil.close(rs);
+                }
+            }
+            Collections.sort(tableInfoList, new Comparator<TableInfo>() {
+
+                public int compare(TableInfo o1, TableInfo o2) {
+                    if (o1 == null || o1.getTableName() == null) {
+                        return -1;
+                    }
+                    if (o2 == null) {
+                        return 1;
+                    }
+                    return o1.getTableName().compareTo(o2.getTableName());
+                }
+            });
+            return tableInfoList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private void fillTableInfo(List<TableInfo> tableInfoList, String catalog, String schema, DatabaseMetaData dbMeta, ResultSet rs) throws SQLException {
+        while (rs.next()) {
+            TableInfo tableInfo = new TableInfo();
+            tableInfo.setTableName(rs.getString("TABLE_NAME"));
+            log.info("Getting information for table [" + tableInfo.getTableName() + "] .");
+            ResultSet colRet = dbMeta.getColumns(catalog, schema, tableInfo.getTableName(), "%");
+            ResultSet pkRet = dbMeta.getPrimaryKeys(catalog, schema, tableInfo.getTableName());
+            Map<String, Object> primaryKeyMap = new HashMap<String, Object>();
+            while (pkRet.next()) {
+                primaryKeyMap.put(pkRet.getString("COLUMN_NAME"), null);
+            }
+
+            while (colRet.next()) {
+                ColumnInfo columnInfo = new ColumnInfo();
+                columnInfo.setTableName(tableInfo.getTableName());
+                columnInfo.setColumnName(colRet.getString("COLUMN_NAME"));
+                columnInfo.setColumnType(colRet.getInt("DATA_TYPE"));
+                columnInfo.setColumnTypeName(colRet.getString("TYPE_NAME"));
+//                columnInfo.setComment((Objects.isNull(colRet.getString("REMARKS"))) ? .getColumnComment(tableInfo.getTableName(), columnInfo.getColumnName()) : colRet.getString("REMARKS"));
+                columnInfo.setLength(colRet.getInt("COLUMN_SIZE"));
+                columnInfo.setPrecision(columnInfo.getLength());
+                columnInfo.setScale(colRet.getInt("DECIMAL_DIGITS"));
+                columnInfo.setNullable("YES".equals(colRet.getString("IS_NULLABLE")));
+                columnInfo.setPrimaryKey(primaryKeyMap.containsKey(columnInfo.getColumnName()));
+                tableInfo.addColumnInfo(columnInfo.getColumnName(), columnInfo);
+            }
+            CloseUtil.close(colRet);
+            CloseUtil.close(pkRet);
+            tableInfoList.add(tableInfo);
+        }
+    }
+
     public ProjectInfo getProject() {
         return project;
     }
 
     public DBParam getParam() {
         return param;
-    }
-
-    public JdbcTemplate getJdbcTemplate() {
-        return jdbcTemplate;
     }
 
     public Configuration getFtlConfig() {

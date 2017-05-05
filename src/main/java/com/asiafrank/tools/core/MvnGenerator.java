@@ -1,16 +1,21 @@
-package com.asiafrank.tools;
+package com.asiafrank.tools.core;
 
+import com.asiafrank.tools.ProjectInfo;
+import com.asiafrank.tools.util.FTLs;
 import freemarker.cache.ClassTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateExceptionHandler;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * @author asiafrank created at 1/5/2017.
  */
 public class MvnGenerator extends Generator {
+    private static final Logger log = Logger.getGlobal();
+
     private final char sp;
 
     private final ProjectInfo project;
@@ -38,14 +43,18 @@ public class MvnGenerator extends Generator {
     }
 
     @Override
-    public void exec() {
+    public void execute() {
         mkMvnDir();
         mkPoms();
         mkConfig();
         mkCoreBaseClass();
 
+        if (dbParam.getTableNames() == null
+                || dbParam.getTableNames().length == 0) {
+            return;
+        }
         CoreGenerator cg = new CoreGenerator(project, dbParam, ftlConfig);
-        cg.exec();
+        cg.execute();
     }
 
     private void mkCoreBaseClass() {

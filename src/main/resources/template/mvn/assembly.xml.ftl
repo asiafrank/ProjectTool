@@ -40,7 +40,7 @@
       <outputDirectory>/lib</outputDirectory>
       <unpack>false</unpack>
       <includes>
-        <include>${artifact}</include>
+        <include>${r"$"}{artifact}</include>
       </includes>
     </dependencySet>
   </dependencySets>
