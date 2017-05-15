@@ -4,18 +4,14 @@ package com.asiafrank.tools.util;
  * @author user created at 5/15/2017.
  */
 public final class MySQLTypeUtil {
-    public static String getJavaTypeName(String columnName) {
-        JavaType t = getJavaType(columnName);
-        return t.getJavaClass().getCanonicalName();
-    }
 
-    public static JavaType getJavaType(String columnName) {
-        String typeName = "";
+    public static JavaType getJavaType(String columnTypeName) {
+        String typeName;
 
-        if (columnName.contains("(")) {
-            typeName = columnName.substring(0, columnName.indexOf("(")).trim();
+        if (columnTypeName.contains("(")) {
+            typeName = columnTypeName.substring(0, columnTypeName.indexOf("(")).trim();
         } else {
-            typeName = columnName;
+            typeName = columnTypeName;
         }
 
         if (Strings.indexOfIgnoreCase(typeName, "DECIMAL") != -1 || Strings.indexOfIgnoreCase(typeName, "DEC") != -1

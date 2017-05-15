@@ -10,42 +10,48 @@ import java.time.OffsetDateTime;
 /**
  * @author user created at 5/15/2017.
  */
-public enum JavaType {
-    BIT(JDBCType.BIT, Boolean.class),
+public final class JavaType {
+    public static final JavaType BIT = new JavaType(JDBCType.BIT, Boolean.class);
 
-    TINYINT(JDBCType.TINYINT, Byte.class),
-    SMALLINT(JDBCType.SMALLINT, Short.class),
-    INTEGER(JDBCType.INTEGER, Integer.class),
-    BIGINT(JDBCType.BIGINT, Long.class),
+    public static final JavaType TINYINT = new JavaType(JDBCType.TINYINT, Byte.class);
+    public static final JavaType SMALLINT = new JavaType(JDBCType.SMALLINT, Short.class);
+    public static final JavaType INTEGER = new JavaType(JDBCType.INTEGER, Integer.class);
+    public static final JavaType BIGINT = new JavaType(JDBCType.BIGINT, Long.class);
 
-    REAL(JDBCType.REAL, Float.class),
-    FLOAT(JDBCType.FLOAT, Double.class),
-    DOUBLE(JDBCType.DOUBLE, Double.class),
-    NUMERIC(JDBCType.NUMERIC, BigDecimal.class),
-    DECIMAL(JDBCType.DECIMAL, BigDecimal.class),
+    public static final JavaType REAL = new JavaType(JDBCType.REAL, Float.class);
+    public static final JavaType FLOAT = new JavaType(JDBCType.FLOAT, Double.class);
+    public static final JavaType DOUBLE = new JavaType(JDBCType.DOUBLE, Double.class);
+    public static final JavaType NUMERIC = new JavaType(JDBCType.NUMERIC, BigDecimal.class);
+    public static final JavaType DECIMAL = new JavaType(JDBCType.DECIMAL, BigDecimal.class);
 
-    CHAR(JDBCType.CHAR, String.class),
-    VARCHAR(JDBCType.VARCHAR, String.class),
-    LONGVARCHAR(JDBCType.LONGVARCHAR, String.class),
+    public static final JavaType CHAR = new JavaType(JDBCType.CHAR, String.class);
+    public static final JavaType VARCHAR = new JavaType(JDBCType.VARCHAR, String.class);
+    public static final JavaType LONGVARCHAR = new JavaType(JDBCType.LONGVARCHAR, String.class);
 
-    BINARY(JDBCType.BINARY, Byte[].class),
-    VARBINARY(JDBCType.VARBINARY, Byte[].class),
-    LONGVARBINARY(JDBCType.LONGVARBINARY, Byte[].class),
+    public static final JavaType BINARY = new JavaType(JDBCType.BINARY, Byte[].class);
+    public static final JavaType VARBINARY = new JavaType(JDBCType.VARBINARY, Byte[].class);
+    public static final JavaType LONGVARBINARY = new JavaType(JDBCType.LONGVARBINARY, Byte[].class);
 
-    DATE(JDBCType.DATE, LocalDate.class),
-    TIME(JDBCType.TIME, LocalTime.class),
-    TIME_WITH_TIMEZONE(JDBCType.TIME_WITH_TIMEZONE, LocalTime.class),
-    TIMESTAMP(JDBCType.TIMESTAMP, LocalDateTime.class),
-    TIMESTAMP_WITH_TIMEZONE(JDBCType.TIMESTAMP_WITH_TIMEZONE, OffsetDateTime.class),
+    public static final JavaType DATE = new JavaType(JDBCType.DATE, LocalDate.class);
+    public static final JavaType TIME = new JavaType(JDBCType.TIME, LocalTime.class);
+    public static final JavaType TIME_WITH_TIMEZONE = new JavaType(JDBCType.TIME_WITH_TIMEZONE, LocalTime.class);
+    public static final JavaType TIMESTAMP = new JavaType(JDBCType.TIMESTAMP, LocalDateTime.class);
+    public static final JavaType TIMESTAMP_WITH_TIMEZONE = new JavaType(JDBCType.TIMESTAMP_WITH_TIMEZONE, OffsetDateTime.class);
 
-    NULL(JDBCType.NULL, Object.class)
-    ;
+    public static final JavaType NULL = new JavaType(JDBCType.NULL, Object.class);
+
     private final JDBCType jdbcType;
     private final Class<?> javaClass;
+    private final boolean isArray;
 
-    JavaType(JDBCType jdbcType, Class<?> javaClass) {
+    public JavaType(JDBCType jdbcType, Class<?> javaClass) {
+        this(jdbcType, javaClass, false);
+    }
+
+    JavaType(JDBCType jdbcType, Class<?> javaClass, boolean isArray) {
         this.jdbcType = jdbcType;
         this.javaClass = javaClass;
+        this.isArray = isArray;
     }
 
     public JDBCType getJdbcType() {
@@ -61,6 +67,7 @@ public enum JavaType {
     }
 
     public String getJavaTypeName() {
-        return getJavaClass().getCanonicalName();
+        String n = getJavaClass().getCanonicalName();
+        return (!isArray)? n : n + "[]";
     }
 }

@@ -196,7 +196,6 @@ public class CoreGenerator extends Generator {
     }
 
     private Map<Object, Object> getPostgreSQLContext(TableInfo tableInfo) {
-        // TODO: use TypeInfoCache JDBCType Types
         final String basePackageName = project.getPackageName();
         final String projectName = project.getProjectName();
         final String tablePrefix = param.getTablePrefix();
