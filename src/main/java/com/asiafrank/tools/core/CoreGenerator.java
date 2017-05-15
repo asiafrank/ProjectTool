@@ -2,7 +2,6 @@ package com.asiafrank.tools.core;
 
 import com.asiafrank.tools.ProjectInfo;
 import com.asiafrank.tools.util.*;
-import com.mysql.cj.core.MysqlType;
 import com.mysql.cj.jdbc.MysqlDataSource;
 import freemarker.cache.ClassTemplateLoader;
 import freemarker.template.Configuration;
@@ -11,7 +10,10 @@ import org.apache.commons.lang.StringUtils;
 import org.postgresql.ds.PGSimpleDataSource;
 
 import javax.sql.DataSource;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -96,26 +98,36 @@ public class CoreGenerator extends Generator {
             String tableName = info.getTableName().toLowerCase();
             Map<Object, Object> context = getMySQLContext(info);
 
-            String mapper = project.getCoreMybatisMapperDir() + sp + tableName + ".xml";
-            String model = project.getCoreModelDir() + sp + getModelClassSimpleName(tableName, tablePrefix) + ".java";
-            String vo = project.getCoreVODir() + sp + getModelClassSimpleName(tableName, tablePrefix) + "VO.java";
-            String dao = project.getCoreDAODir() + sp + getModelClassSimpleName(tableName, tablePrefix) + "DAO.java";
-            String daoImpl = project.getCoreDAOImplDir() + sp + "MyBatis" + getModelClassSimpleName(tableName, tablePrefix) + "DAO.java";
-            String bo = project.getCoreBODir() + sp + getModelClassSimpleName(tableName, tablePrefix) + "BO.java";
-            String boImpl = project.getCoreBOImplDir() + sp + "Default" + getModelClassSimpleName(tableName, tablePrefix) + "BO.java";
-
-            gen(mapper, FTLs.mybatis_mapper_mysql, ftlConfig, context);
-            gen(model, FTLs.model_model, ftlConfig, context);
-            gen(vo, FTLs.vo_vo, ftlConfig, context);
-            gen(dao, FTLs.dao_dao, ftlConfig, context);
-            gen(daoImpl, FTLs.mybatis_dao_dao_impl, ftlConfig, context);
-            gen(bo, FTLs.bo_bo, ftlConfig, context);
-            gen(boImpl, FTLs.bo_bo_impl, ftlConfig, context);
+            genFiles(tablePrefix, tableName, context);
         }
     }
 
     private void mkPostgreSQLModel(List<TableInfo> tableInfoList) {
-        throw new UnsupportedOperationException();
+        final String tablePrefix = param.getTablePrefix();
+        for (TableInfo info : tableInfoList) {
+            String tableName = info.getTableName().toLowerCase();
+            Map<Object, Object> context = getPostgreSQLContext(info);
+
+            genFiles(tablePrefix, tableName, context);
+        }
+    }
+
+    private void genFiles(String tablePrefix, String tableName, Map<Object, Object> context) {
+        String mapper = project.getCoreMybatisMapperDir() + sp + tableName + ".xml";
+        String model = project.getCoreModelDir() + sp + getModelClassSimpleName(tableName, tablePrefix) + ".java";
+        String vo = project.getCoreVODir() + sp + getModelClassSimpleName(tableName, tablePrefix) + "VO.java";
+        String dao = project.getCoreDAODir() + sp + getModelClassSimpleName(tableName, tablePrefix) + "DAO.java";
+        String daoImpl = project.getCoreDAOImplDir() + sp + "MyBatis" + getModelClassSimpleName(tableName, tablePrefix) + "DAO.java";
+        String bo = project.getCoreBODir() + sp + getModelClassSimpleName(tableName, tablePrefix) + "BO.java";
+        String boImpl = project.getCoreBOImplDir() + sp + "Default" + getModelClassSimpleName(tableName, tablePrefix) + "BO.java";
+
+        gen(mapper, FTLs.mybatis_mapper_mysql, ftlConfig, context);
+        gen(model, FTLs.model_model, ftlConfig, context);
+        gen(vo, FTLs.vo_vo, ftlConfig, context);
+        gen(dao, FTLs.dao_dao, ftlConfig, context);
+        gen(daoImpl, FTLs.mybatis_dao_dao_impl, ftlConfig, context);
+        gen(bo, FTLs.bo_bo, ftlConfig, context);
+        gen(boImpl, FTLs.bo_bo_impl, ftlConfig, context);
     }
 
     private void mkMybatisConfig() {
@@ -166,15 +178,12 @@ public class CoreGenerator extends Generator {
 
             propertyNameList.add(getPropertyName(columnInfo.getColumnName()));
 
-            // use com.mysql.cj.core.MySqlType JDBCType Types
-            MysqlType mysqlType = MysqlType.getByName(columnTypeName);
-            int jdbcType = mysqlType.getJdbcType();
-            JDBCType t = JDBCType.valueOf(jdbcType);
-            columnTypeList.add(t.getName());
-            propertyTypeList.add(mysqlType.getClassName());
+            JavaType t = MySQLTypeUtil.getJavaType(columnTypeName);
+            columnTypeList.add(t.getJdbcTypeName());
+            propertyTypeList.add(t.getJavaTypeName());
 
             if ("id".equalsIgnoreCase(columnName)) {
-                pkType = "java.lang.Integer";
+                pkType = t.getJavaTypeName();
             }
         }
         context.put("propertyNameList", propertyNameList);
@@ -218,15 +227,12 @@ public class CoreGenerator extends Generator {
 
             propertyNameList.add(getPropertyName(columnInfo.getColumnName()));
 
-            // use com.mysql.cj.core.MySqlType JDBCType Types
-            MysqlType mysqlType = MysqlType.getByName(columnTypeName);
-            int jdbcType = mysqlType.getJdbcType();
-            JDBCType t = JDBCType.valueOf(jdbcType);
-            columnTypeList.add(t.getName());
-            propertyTypeList.add(mysqlType.getClassName());
+            JavaType t = PostgreSQLTypeUtil.getJavaType(columnTypeName);
+            columnTypeList.add(t.getJdbcTypeName());
+            propertyTypeList.add(t.getJavaTypeName());
 
             if ("id".equalsIgnoreCase(columnName)) {
-                pkType = "java.lang.Integer";
+                pkType = t.getJavaTypeName();
             }
         }
         context.put("propertyNameList", propertyNameList);
@@ -300,17 +306,14 @@ public class CoreGenerator extends Generator {
                     CloseUtil.close(rs);
                 }
             }
-            Collections.sort(tableInfoList, new Comparator<TableInfo>() {
-
-                public int compare(TableInfo o1, TableInfo o2) {
-                    if (o1 == null || o1.getTableName() == null) {
-                        return -1;
-                    }
-                    if (o2 == null) {
-                        return 1;
-                    }
-                    return o1.getTableName().compareTo(o2.getTableName());
+            tableInfoList.sort((o1, o2) -> {
+                if (o1 == null || o1.getTableName() == null) {
+                    return -1;
                 }
+                if (o2 == null) {
+                    return 1;
+                }
+                return o1.getTableName().compareTo(o2.getTableName());
             });
             return tableInfoList;
         } catch (Exception e) {
