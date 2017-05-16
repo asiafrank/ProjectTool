@@ -10,7 +10,7 @@
       <artifactId>spring-boot-starter-parent</artifactId>
       <version>1.5.3.RELEASE</version>
     </parent>
-  <groupId>${basePackageName}.${projectName}</groupId>
+  <groupId>${basePackageName}</groupId>
   <artifactId>${projectName}</artifactId>
   <packaging>pom</packaging>
   <version>1.0.0-SNAPSHOT</version>
@@ -44,11 +44,6 @@
 
   <dependencyManagement>
     <dependencies>
-      <dependency>
-        <groupId>${r"$"}{project.groupId}</groupId>
-        <artifactId>${projectName}-api</artifactId>
-        <version>${r"$"}{project.version}</version>
-      </dependency>
       <dependency>
         <groupId>${r"$"}{project.groupId}</groupId>
         <artifactId>${projectName}-core</artifactId>

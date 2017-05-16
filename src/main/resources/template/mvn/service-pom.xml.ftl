@@ -6,12 +6,12 @@
 
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>${basePackageName}.${projectName}</groupId>
+    <groupId>${basePackageName}</groupId>
     <artifactId>${projectName}-parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
   </parent>
   <artifactId>${projectName}-service</artifactId>
-  <packaging>war</packaging>
+  <packaging>jar</packaging>
   <name>${r"$"}{project.artifactId} v${r"$"}{project.version}</name>
 
   <build>

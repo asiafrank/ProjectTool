@@ -1,11 +1,11 @@
-package ${basePackageName}.${projectName}.vo;
+package ${basePackageName}.core.vo;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import ${basePackageName}.${projectName}.base.Expression;
-import ${basePackageName}.${projectName}.base.ExpressionChain;
-import ${basePackageName}.${projectName}.model.${modelClassSimpleName};
+import ${basePackageName}.core.base.Expression;
+import ${basePackageName}.core.base.ExpressionChain;
+import ${basePackageName}.core.model.${modelClassSimpleName};
 
 public class ${modelClassSimpleName}VO extends ${modelClassSimpleName} {
     private static final long serialVersionUID = 1L;

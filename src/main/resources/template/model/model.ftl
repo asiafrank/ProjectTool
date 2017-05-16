@@ -1,4 +1,4 @@
-package ${basePackageName}.${projectName}.model;
+package ${basePackageName}.core.model;
 
 import java.io.Serializable;
 

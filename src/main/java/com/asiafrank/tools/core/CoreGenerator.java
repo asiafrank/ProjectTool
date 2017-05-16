@@ -131,8 +131,11 @@ public class CoreGenerator extends Generator {
     }
 
     private void mkMybatisConfig() {
+        final String[] tableNames = param.getTableNames();
+        Map<Object, Object> context = new HashMap<>();
+        context.put("tableNames", tableNames);
         gen(project.getCoreResourcesDir() + sp + "mybatis-config.xml", FTLs.mybatis_mybatis_config,
-                ftlConfig, new HashMap<>());
+                ftlConfig, context);
     }
 
     private void mkCoreDir() {

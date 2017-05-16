@@ -1,8 +1,8 @@
-package ${basePackageName}.${projectName}.dao;
+package ${basePackageName}.core.dao;
 
-import ${basePackageName}.${projectName}.base.DAO;
-import ${basePackageName}.${projectName}.model.${modelClassSimpleName};
-import ${basePackageName}.${projectName}.vo.${modelClassSimpleName}VO;
+import ${basePackageName}.core.base.DAO;
+import ${basePackageName}.core.model.${modelClassSimpleName};
+import ${basePackageName}.core.vo.${modelClassSimpleName}VO;
 
 public interface ${modelClassSimpleName}DAO extends DAO<${modelClassSimpleName}, ${modelClassSimpleName}VO, ${pkType}> {
 }

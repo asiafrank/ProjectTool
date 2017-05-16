@@ -6,8 +6,8 @@
 
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>${basePackageName}.${projectName}</groupId>
-    <artifactId>${projectName}-parent</artifactId>
+    <groupId>${basePackageName}</groupId>
+    <artifactId>${projectName}</artifactId>
     <version>1.0.0-SNAPSHOT</version>
   </parent>
   <artifactId>${projectName}-core</artifactId>

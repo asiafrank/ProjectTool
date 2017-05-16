@@ -1,4 +1,4 @@
-package ${basePackageName}.${projectName}.base;
+package ${basePackageName}.core.base;
 
 public class OrderBy {
     private StringBuilder sb = new StringBuilder();

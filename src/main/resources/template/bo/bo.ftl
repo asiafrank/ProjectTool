@@ -1,8 +1,8 @@
-package ${basePackageName}.${projectName}.bo;
+package ${basePackageName}.core.bo;
 
-import ${basePackageName}.${projectName}.base.BO;
-import ${basePackageName}.${projectName}.model.${modelClassSimpleName};
-import ${basePackageName}.${projectName}.vo.${modelClassSimpleName}VO;
+import ${basePackageName}.core.base.BO;
+import ${basePackageName}.core.model.${modelClassSimpleName};
+import ${basePackageName}.core.vo.${modelClassSimpleName}VO;
 
 public interface ${modelClassSimpleName}BO extends BO<${modelClassSimpleName}, ${modelClassSimpleName}VO, ${pkType}> {
 }

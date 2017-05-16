@@ -58,7 +58,7 @@ public class MvnGenerator extends Generator {
     }
 
     private void mkCoreBaseClass() {
-        final String coreBaseClassDir = project.getCoreBaseDir() + sp + "base";
+        final String coreBaseClassDir = project.getCorePackageDir() + sp + "base";
         mkdir(coreBaseClassDir);
         gen(coreBaseClassDir + sp + "AbstractBO.java",
                 FTLs.base_abstract_bo, ftlConfig, context);
