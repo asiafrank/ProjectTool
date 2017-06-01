@@ -121,7 +121,11 @@ public class CoreGenerator extends Generator {
         String bo = project.getCoreBODir() + sp + getModelClassSimpleName(tableName, tablePrefix) + "BO.java";
         String boImpl = project.getCoreBOImplDir() + sp + "Default" + getModelClassSimpleName(tableName, tablePrefix) + "BO.java";
 
-        gen(mapper, FTLs.mybatis_mapper_mysql, ftlConfig, context);
+        if (DB.MYSQL == param.getDb())
+            gen(mapper, FTLs.mybatis_mapper_mysql, ftlConfig, context);
+        else
+            gen(mapper, FTLs.mybatis_mapper_postgresql, ftlConfig, context);
+
         gen(model, FTLs.model_model, ftlConfig, context);
         gen(vo, FTLs.vo_vo, ftlConfig, context);
         gen(dao, FTLs.dao_dao, ftlConfig, context);

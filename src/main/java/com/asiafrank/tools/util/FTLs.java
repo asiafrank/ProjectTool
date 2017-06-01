@@ -37,4 +37,6 @@ public class FTLs {
     public static final String mybatis_dao_dao_impl = "template/mybatis/dao/dao-impl.ftl";
 
     public static final String vo_vo = "template/vo/vo.ftl";
+
+    public static final String service_main = "template/service/main.ftl";
 }
