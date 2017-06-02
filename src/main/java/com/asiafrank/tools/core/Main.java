@@ -18,5 +18,8 @@ public class Main {
 
         MvnGenerator mg = new MvnGenerator(info, dbParam);
         mg.execute();
+
+        /*CoreGenerator cg = new CoreGenerator(info, dbParam);
+        cg.execute();*/
     }
 }
