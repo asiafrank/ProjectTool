@@ -79,7 +79,6 @@ public class CoreGenerator extends Generator {
     @SuppressWarnings("unchecked")
     public void execute() {
         mkCoreDir();
-        mkMybatisConfig();
 
         final String[] tableNames = param.getTableNames();
         final String schema = param.getSchema();
@@ -132,14 +131,6 @@ public class CoreGenerator extends Generator {
         gen(daoImpl, FTLs.mybatis_dao_dao_impl, ftlConfig, context);
         gen(bo, FTLs.bo_bo, ftlConfig, context);
         gen(boImpl, FTLs.bo_bo_impl, ftlConfig, context);
-    }
-
-    private void mkMybatisConfig() {
-        final String[] tableNames = param.getTableNames();
-        Map<Object, Object> context = new HashMap<>();
-        context.put("tableNames", tableNames);
-        gen(project.getCoreResourcesDir() + sp + "mybatis-config.xml", FTLs.mybatis_mybatis_config,
-                ftlConfig, context);
     }
 
     private void mkCoreDir() {

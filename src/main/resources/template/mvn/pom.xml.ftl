@@ -11,7 +11,7 @@
       <version>1.5.3.RELEASE</version>
     </parent>
   <groupId>${basePackageName}</groupId>
-  <artifactId>${projectName}</artifactId>
+  <artifactId>${projectName}-parent</artifactId>
   <packaging>pom</packaging>
   <version>1.0.0-SNAPSHOT</version>
   <name>${r"$"}{project.artifactId} v${r"$"}{project.version}</name>
@@ -47,6 +47,11 @@
       <dependency>
         <groupId>${r"$"}{project.groupId}</groupId>
         <artifactId>${projectName}-core</artifactId>
+        <version>${r"$"}{project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${r"$"}{project.groupId}</groupId>
+        <artifactId>${projectName}-service</artifactId>
         <version>${r"$"}{project.version}</version>
       </dependency>
     </dependencies>

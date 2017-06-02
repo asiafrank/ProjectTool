@@ -10,8 +10,5 @@
     <mapper resource="mapper/table_name.xml" />
     <mapper resource="mapper/extension/table_name.xml" />
     -->
-  <#list tableNames as tableName>
-  <mapper resource="mapper/${tableName}.xml" />
-  </#list>
   </mappers>
 </configuration>
