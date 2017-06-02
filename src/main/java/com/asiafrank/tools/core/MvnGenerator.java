@@ -155,6 +155,8 @@ public class MvnGenerator extends Generator {
                 ftlConfig, context);
         gen(project.getServiceBaseDir() + sp + "start.sh", FTLs.service_start,
                 ftlConfig, context);
+        gen(project.getServiceBaseDir() + sp + "stop.sh", FTLs.service_shutdown,
+                ftlConfig, context);
         gen(project.getServiceBaseDir() + sp + "assembly.xml", FTLs.service_assembly,
                 ftlConfig, context);
     }

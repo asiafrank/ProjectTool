@@ -29,6 +29,7 @@ public class FTLs {
     public static final String core_pom = "template/mvn/core-pom.xml.ftl";
     public static final String service_pom = "template/mvn/service-pom.xml.ftl";
     public static final String service_start = "template/mvn/start.sh.ftl";
+    public static final String service_shutdown = "template/mvn/stop.sh.ftl";
     public static final String service_assembly = "template/mvn/assembly.xml.ftl";
 
     public static final String mybatis_mapper_mysql = "template/mybatis/mapper-mysql.ftl";
