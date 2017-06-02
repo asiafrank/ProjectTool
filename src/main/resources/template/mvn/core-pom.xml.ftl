@@ -34,11 +34,19 @@
       <artifactId>guava</artifactId>
       <version>21.0</version>
     </dependency>
+    <#if isMySQL == 1>
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
       <version>6.0.6</version>
     </dependency>
+    <#else>
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>9.4.1212</version>
+    </dependency>
+    </#if>
     <dependency>
       <groupId>com.fasterxml.jackson.datatype</groupId>
       <artifactId>jackson-datatype-jdk8</artifactId>

@@ -1,6 +1,7 @@
 package com.asiafrank.tools.core;
 
 import com.asiafrank.tools.ProjectInfo;
+import com.asiafrank.tools.util.DB;
 import com.asiafrank.tools.util.FTLs;
 import freemarker.cache.ClassTemplateLoader;
 import freemarker.template.Configuration;
@@ -38,6 +39,7 @@ public class MvnGenerator extends Generator {
 
         context.put("basePackageName", projectInfo.getPackageName());
         context.put("projectName", projectInfo.getProjectName());
+        context.put("isMySQL", dbParam.getDb() == DB.MYSQL ? 1 : 0);
 
         this.sp = projectInfo.getSp();
     }

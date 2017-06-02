@@ -120,7 +120,7 @@
 
   <sql id="sql_pagination_end">
   <![CDATA[
-    LIMIT ${r"#"}{limit}, OFFSET ${r"#"}{offset}
+    LIMIT ${r"#"}{limit} OFFSET ${r"#"}{offset}
   ]]>
   </sql>
 

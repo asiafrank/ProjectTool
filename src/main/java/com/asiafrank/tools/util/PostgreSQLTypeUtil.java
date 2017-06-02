@@ -12,12 +12,16 @@ public class PostgreSQLTypeUtil {
 
     // not support array type
     static {
+        // https://www.postgresql.org/docs/9.5/static/datatype.html
         mapping.put("int2", JavaType.SMALLINT);
         mapping.put("smallint", JavaType.SMALLINT);
         mapping.put("int", JavaType.INTEGER);
         mapping.put("int4", JavaType.INTEGER);
         mapping.put("integer", JavaType.INTEGER);
         mapping.put("int8", JavaType.BIGINT);
+        mapping.put("bigint", JavaType.BIGINT);
+        mapping.put("serial8", JavaType.BIGINT);
+        mapping.put("bigserial", JavaType.BIGINT);
         mapping.put("oid", JavaType.BIGINT);
         mapping.put("money", JavaType.DOUBLE);
         mapping.put("numeric", JavaType.NUMERIC);

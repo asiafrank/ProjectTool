@@ -214,13 +214,13 @@ public class CoreGenerator extends Generator {
             String columnName = columnInfo.getColumnName();
             String columnTypeName = columnInfo.getColumnTypeName();
 
-            System.out.println(columnInfo.getColumnName());
-            System.out.println(columnInfo.getColumnType());
-            System.out.println(columnInfo.getColumnTypeName());
-            System.out.println(columnInfo.getComment());
-            System.out.println(columnInfo.getLength());
-            System.out.println(columnInfo.getScale());
-            System.out.println(columnInfo.getPrecision());
+            System.out.println(columnInfo.getColumnName() + " " +
+                    columnInfo.getColumnType() + " " +
+                    columnInfo.getColumnTypeName() + " " +
+                    columnInfo.getComment() + " " +
+                    columnInfo.getLength() + " " +
+                    columnInfo.getScale() + " " +
+                    columnInfo.getPrecision());
 
             propertyNameList.add(getPropertyName(columnInfo.getColumnName()));
 

@@ -11,10 +11,10 @@ public class Main {
         ProjectInfo info = new ProjectInfo("E:\\personal",
                 "test", "com.asiafrank.test");
         DBParam dbParam = new DBParam(
-                "test",
-                "root",
-                "root", DB.MYSQL, "", "",
-                new String[]{"game", "player"});
+                "sample",
+                "postgres",
+                "postgres", DB.POSTGRESQL, "", "",
+                new String[]{"sample"});
 
         MvnGenerator mg = new MvnGenerator(info, dbParam);
         mg.execute();
