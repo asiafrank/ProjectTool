@@ -70,4 +70,9 @@ public final class JavaType {
         String n = getJavaClass().getCanonicalName();
         return (!isArray)? n : n + "[]";
     }
+
+    public String getJavaSimpleName() {
+        String n = getJavaClass().getSimpleName();
+        return (!isArray)? n : n + "[]";
+    }
 }

@@ -157,6 +157,7 @@ public class CoreGenerator extends Generator {
         context.put("tableName", tableName);
         context.put("modelClassSimpleName", getModelClassSimpleName(tableName, tablePrefix));
 
+        Set<String> importSet = new HashSet<>();
         List<String> propertyNameList = new ArrayList<String>();
         List<String> propertyTypeList = new ArrayList<String>();
         List<String> columnTypeList = new ArrayList<String>();
@@ -166,24 +167,27 @@ public class CoreGenerator extends Generator {
             String columnName = columnInfo.getColumnName();
             String columnTypeName = columnInfo.getColumnTypeName();
 
-            System.out.println(columnInfo.getColumnName());
-            System.out.println(columnInfo.getColumnType());
-            System.out.println(columnInfo.getColumnTypeName());
-            System.out.println(columnInfo.getComment());
-            System.out.println(columnInfo.getLength());
-            System.out.println(columnInfo.getScale());
-            System.out.println(columnInfo.getPrecision());
+            System.out.println(columnInfo.getColumnName() + " " +
+                    columnInfo.getColumnType() + " " +
+                    columnInfo.getColumnTypeName() + " " +
+                    columnInfo.getComment() + " " +
+                    columnInfo.getLength() + " " +
+                    columnInfo.getScale() + " " +
+                    columnInfo.getPrecision());
 
             propertyNameList.add(getPropertyName(columnInfo.getColumnName()));
 
             JavaType t = MySQLTypeUtil.getJavaType(columnTypeName);
             columnTypeList.add(t.getJdbcTypeName());
-            propertyTypeList.add(t.getJavaTypeName());
+            propertyTypeList.add(t.getJavaSimpleName());
+            importSet.add(t.getJavaTypeName());
 
             if ("id".equalsIgnoreCase(columnName)) {
-                pkType = t.getJavaTypeName();
+                pkType = t.getJavaSimpleName();
+                importSet.add(t.getJavaTypeName());
             }
         }
+        context.put("importList", importSet.stream().sorted().toArray());
         context.put("propertyNameList", propertyNameList);
         context.put("propertyTypeList", propertyTypeList);
         context.put("columnTypeList", columnTypeList);
@@ -205,6 +209,7 @@ public class CoreGenerator extends Generator {
         context.put("tableName", tableName);
         context.put("modelClassSimpleName", getModelClassSimpleName(tableName, tablePrefix));
 
+        Set<String> importSet = new HashSet<>();
         List<String> propertyNameList = new ArrayList<String>();
         List<String> propertyTypeList = new ArrayList<String>();
         List<String> columnTypeList = new ArrayList<String>();
@@ -226,12 +231,15 @@ public class CoreGenerator extends Generator {
 
             JavaType t = PostgreSQLTypeUtil.getJavaType(columnTypeName);
             columnTypeList.add(t.getJdbcTypeName());
-            propertyTypeList.add(t.getJavaTypeName());
+            propertyTypeList.add(t.getJavaSimpleName());
+            importSet.add(t.getJavaTypeName());
 
             if ("id".equalsIgnoreCase(columnName)) {
-                pkType = t.getJavaTypeName();
+                pkType = t.getJavaSimpleName();
+                importSet.add(t.getJavaTypeName());
             }
         }
+        context.put("importList", importSet.stream().sorted().toArray());
         context.put("propertyNameList", propertyNameList);
         context.put("propertyTypeList", propertyTypeList);
         context.put("columnTypeList", columnTypeList);

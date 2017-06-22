@@ -1,6 +1,9 @@
 package ${basePackageName}.core.model;
 
 import java.io.Serializable;
+<#list importList as il>
+import ${il};
+</#list>
 
 public class ${modelClassSimpleName} implements Serializable {
     private static final long serialVersionUID = 1L;
