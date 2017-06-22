@@ -1,6 +1,6 @@
 package com.asiafrank.tools.core;
 
-import com.asiafrank.tools.ProjectInfo;
+import com.asiafrank.tools.util.ProjectInfo;
 import com.asiafrank.tools.util.*;
 import com.mysql.cj.jdbc.MysqlDataSource;
 import freemarker.cache.ClassTemplateLoader;

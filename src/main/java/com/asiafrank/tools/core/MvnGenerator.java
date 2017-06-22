@@ -1,6 +1,6 @@
 package com.asiafrank.tools.core;
 
-import com.asiafrank.tools.ProjectInfo;
+import com.asiafrank.tools.util.ProjectInfo;
 import com.asiafrank.tools.util.DB;
 import com.asiafrank.tools.util.FTLs;
 import freemarker.cache.ClassTemplateLoader;
@@ -40,6 +40,7 @@ public class MvnGenerator extends Generator {
         context.put("basePackageName", projectInfo.getPackageName());
         context.put("projectName", projectInfo.getProjectName());
         context.put("isMySQL", dbParam.getDb() == DB.MYSQL ? 1 : 0);
+        context.put("jerseyStyle", projectInfo.isJerseyStyle());
 
         this.sp = projectInfo.getSp();
     }
@@ -108,14 +109,22 @@ public class MvnGenerator extends Generator {
 
         gen(serviceBaseClassDir + sp + "Main.java",
                 FTLs.service_main, ftlConfig, context);
-        gen(serviceConfigDir + sp + "JerseyConfig.java",
-                FTLs.service_jersey_config, ftlConfig, context);
         gen(serviceControllerDir + sp + "SampleController.java",
                 FTLs.service_sample_controller, ftlConfig, context);
         gen(serviceResolverDir + sp + "PageDefault.java",
                 FTLs.service_page_default, ftlConfig, context);
-        gen(serviceResolverDir + sp + "PageDefaultFactoryProvider.java",
-                FTLs.service_page_default_factory_provider, ftlConfig, context);
+        if (project.isJerseyStyle()) {
+            gen(serviceConfigDir + sp + "JerseyConfig.java",
+                    FTLs.service_jersey_config, ftlConfig, context);
+            gen(serviceResolverDir + sp + "PageDefaultFactoryProvider.java",
+                    FTLs.service_page_default_factory_provider, ftlConfig, context);
+        } else {
+            gen(serviceConfigDir + sp + "WebConfig.java",
+                    FTLs.service_web_config, ftlConfig, context);
+            gen(serviceResolverDir + sp + "PageDefaultResolver.java",
+                    FTLs.service_page_default_resolver, ftlConfig, context);
+        }
+
     }
 
     private void mkConfig() {
@@ -124,6 +133,7 @@ public class MvnGenerator extends Generator {
         cxt.put("username", dbParam.getUsername());
         cxt.put("password", dbParam.getPassword());
         cxt.put("driver", dbParam.getDriver());
+        cxt.put("jerseyStyle", project.isJerseyStyle());
         gen(project.getServiceConfigDir() + sp + "application.properties",
                 FTLs.config_application, ftlConfig, cxt);
     }

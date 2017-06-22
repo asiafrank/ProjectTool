@@ -1,6 +1,8 @@
-package com.asiafrank.tools.core;
+package com.asiafrank.tools;
 
-import com.asiafrank.tools.ProjectInfo;
+import com.asiafrank.tools.util.ProjectInfo;
+import com.asiafrank.tools.core.DBParam;
+import com.asiafrank.tools.core.MvnGenerator;
 import com.asiafrank.tools.util.DB;
 
 /**

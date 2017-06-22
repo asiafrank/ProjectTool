@@ -1,9 +1,13 @@
 # http://docs.spring.io/autorepo/docs/spring-boot/current/reference/htmlsingle/#common-application-properties
 server.port=8080
 server.session.cookie.http-only=true
-endpoints.cors.allowed-methods=GET,POST,PUT,DELETE
 
+<#if jerseyStyle>
 spring.jersey.application-path=/
+<#else>
+server.servlet-path=/
+</#if>
+endpoints.cors.allowed-methods=GET,POST,PUT,DELETE
 spring.jackson.serialization.write-dates-as-timestamps=false
 
 logging.level.root=INFO

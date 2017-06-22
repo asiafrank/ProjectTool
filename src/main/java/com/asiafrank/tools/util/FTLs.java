@@ -43,7 +43,9 @@ public class FTLs {
 
     public static final String service_main = "template/service/main.ftl";
     public static final String service_jersey_config = "template/service/config/jersey-config.ftl";
+    public static final String service_web_config = "template/service/config/web-config.ftl";
     public static final String service_sample_controller = "template/service/controller/sample-controller.ftl";
     public static final String service_page_default = "template/service/resolver/page-default.ftl";
     public static final String service_page_default_factory_provider = "template/service/resolver/page-default-factory-provider.ftl";
+    public static final String service_page_default_resolver = "template/service/resolver/page-default-resolver.ftl";
 }

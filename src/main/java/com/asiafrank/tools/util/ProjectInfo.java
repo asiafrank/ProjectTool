@@ -1,4 +1,4 @@
-package com.asiafrank.tools;
+package com.asiafrank.tools.util;
 
 import java.io.File;
 
@@ -41,7 +41,13 @@ public class ProjectInfo {
     private final String serviceResourcesDir;
     private final String serviceConfigDir;
 
+    private final boolean jerseyStyle;
+
     public ProjectInfo(String path, String projectName, String packageName) {
+        this(path, projectName, packageName, false);
+    }
+
+    public ProjectInfo(String path, String projectName, String packageName, boolean jerseyStyle) {
         this.path = path;
         this.projectName = projectName;
         this.packageName = packageName;
@@ -71,6 +77,8 @@ public class ProjectInfo {
         this.servicePackageDir = serviceBaseDir + java + sp + packageDir + sp + "service";
         this.serviceResourcesDir = serviceBaseDir + resources;
         this.serviceConfigDir = serviceBaseDir + config;
+
+        this.jerseyStyle = jerseyStyle;
     }
 
     public String getPath() {
@@ -155,5 +163,9 @@ public class ProjectInfo {
 
     public char getDot() {
         return dot;
+    }
+
+    public boolean isJerseyStyle() {
+        return jerseyStyle;
     }
 }
