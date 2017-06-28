@@ -167,7 +167,7 @@ public class CoreGenerator extends Generator {
             String columnName = columnInfo.getColumnName();
             String columnTypeName = columnInfo.getColumnTypeName();
 
-            System.out.println(columnInfo.getColumnName() + " " +
+            log.info(columnInfo.getColumnName() + " " +
                     columnInfo.getColumnType() + " " +
                     columnInfo.getColumnTypeName() + " " +
                     columnInfo.getComment() + " " +
@@ -219,7 +219,7 @@ public class CoreGenerator extends Generator {
             String columnName = columnInfo.getColumnName();
             String columnTypeName = columnInfo.getColumnTypeName();
 
-            System.out.println(columnInfo.getColumnName() + " " +
+            log.info(columnInfo.getColumnName() + " " +
                     columnInfo.getColumnType() + " " +
                     columnInfo.getColumnTypeName() + " " +
                     columnInfo.getComment() + " " +

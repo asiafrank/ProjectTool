@@ -18,7 +18,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
       argumentResolvers.add(new PageDefaultResolver());
   }
 
-
   @Override
   public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
   }
