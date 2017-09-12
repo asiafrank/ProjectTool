@@ -86,7 +86,7 @@
     </#list>
       <if test="!condition.expressionChainList.empty">
         AND
-        <foreach collection="condition.expressionChainList" item="expressionChain" separator="OR">
+        <foreach collection="condition.expressionChainList" item="expressionChain" open="(" separator="OR" close=")">
           <if test="!expressionChain.expressionList.empty">
             <foreach collection="expressionChain.expressionList" item="expression" separator="AND">
               <choose>
