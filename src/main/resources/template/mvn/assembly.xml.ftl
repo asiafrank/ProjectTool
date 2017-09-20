@@ -29,7 +29,7 @@
             <outputDirectory>/</outputDirectory>
             <includes>
               <include>start.sh</include>
-              <include>shutdown.sh</include>
+              <include>stop.sh</include>
             </includes>
           </fileSet>
         </fileSets>
