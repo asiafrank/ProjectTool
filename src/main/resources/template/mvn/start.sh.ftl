@@ -1,1 +1,1 @@
-nohup java -cp config:lib/${projectName}-service-1.0.0-SNAPSHOT.jar org.springframework.boot.loader.PropertiesLauncher > nohup.out 2>&1 < /dev/null &
+nohup java -cp config:lib/*.jar ${basePackageName}.service.Main > nohup.out 2>&1 < /dev/null &

@@ -45,4 +45,13 @@
       </includes>
     </dependencySet>
   </dependencySets>
+  <fileSets>
+    <fileSet>
+      <directory>${project.build.directory}/dependency</directory>
+      <outputDirectory>/lib</outputDirectory>
+      <includes>
+        <include>*.jar</include>
+      </includes>
+    </fileSet>
+  </fileSets>
 </assembly>
