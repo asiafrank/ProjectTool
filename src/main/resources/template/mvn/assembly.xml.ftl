@@ -47,7 +47,7 @@
   </dependencySets>
   <fileSets>
     <fileSet>
-      <directory>${project.build.directory}/dependency</directory>
+      <directory>${r"$"}{project.build.directory}/dependency</directory>
       <outputDirectory>/lib</outputDirectory>
       <includes>
         <include>*.jar</include>
