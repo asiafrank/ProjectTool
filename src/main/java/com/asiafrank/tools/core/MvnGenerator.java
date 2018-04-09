@@ -140,6 +140,7 @@ public class MvnGenerator extends Generator {
 
     private void mkMybatisConfig() {
         Map<Object, Object> context = new HashMap<>();
+        context.put("tableNames", dbParam.getTableNames());
         gen(project.getCoreResourcesDir() + sp + "mybatis-config.xml", FTLs.mybatis_mybatis_config,
                 ftlConfig, context);
     }
