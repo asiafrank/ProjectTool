@@ -78,6 +78,6 @@ public class Page<T> {
     }
 
     public boolean hasNext() {
-        return pageNum + 1 < totalPage;
+        return pageNum < totalPage;
     }
 }
