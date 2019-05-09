@@ -1,4 +1,4 @@
-package ${basePackageName}.core.base;
+package ${basePackageName};
 
 import java.util.HashSet;
 import java.util.Set;

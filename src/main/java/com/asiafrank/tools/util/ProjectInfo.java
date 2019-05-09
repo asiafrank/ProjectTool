@@ -5,6 +5,7 @@ import java.io.File;
 /**
  * @author asiafrank created at 1/5/2017.
  */
+@Deprecated
 public class ProjectInfo {
 
     private final char sp = File.separatorChar;

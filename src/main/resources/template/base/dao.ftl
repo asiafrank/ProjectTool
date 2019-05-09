@@ -1,4 +1,4 @@
-package ${basePackageName}.core.base;
+package ${basePackageName};
 
 import java.io.Serializable;
 import java.util.List;

@@ -1,4 +1,4 @@
-package ${basePackageName}.core.base;
+package ${basePackageName};
 
 public class Pageable {
     private final int pageNum;

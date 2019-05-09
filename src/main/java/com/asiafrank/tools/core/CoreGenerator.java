@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 /**
  * @author asiafrank created at 1/5/2017.
  */
+@Deprecated
 public class CoreGenerator extends Generator {
     private static final Logger log = Logger.getGlobal();
 
@@ -175,7 +176,7 @@ public class CoreGenerator extends Generator {
                     columnInfo.getScale() + " " +
                     columnInfo.getPrecision());
 
-            propertyNameList.add(getPropertyName(columnInfo.getColumnName()));
+            propertyNameList.add(columnInfo.getColumnName());
 
             JavaType t = MySQLTypeUtil.getJavaType(columnTypeName);
             columnTypeList.add(t.getJdbcTypeName());

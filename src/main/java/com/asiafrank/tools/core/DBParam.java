@@ -5,6 +5,7 @@ import com.asiafrank.tools.util.DB;
 /**
  * @author asiafrank created at 1/5/2017.
  */
+@Deprecated
 public class DBParam {
 
     private final DB db;

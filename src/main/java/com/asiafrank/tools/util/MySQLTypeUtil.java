@@ -45,7 +45,7 @@ public final class MySQLTypeUtil {
 
         } else if (Strings.indexOfIgnoreCase(typeName, "INT") != -1 || Strings.indexOfIgnoreCase(typeName, "INTEGER") != -1
                 || Strings.indexOfIgnoreCase(typeName, "INT4") != -1) {
-            return JavaType.BIGINT;
+            return JavaType.INTEGER;
 
         } else if (Strings.indexOfIgnoreCase(typeName, "DOUBLE") != -1 || Strings.indexOfIgnoreCase(typeName, "REAL") != -1
                 || Strings.indexOfIgnoreCase(typeName, "FLOAT8") != -1) {

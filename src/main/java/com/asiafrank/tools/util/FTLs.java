@@ -16,14 +16,14 @@ public class FTLs {
     public static final String base_page                             = "template/base/page.ftl";
     public static final String base_pageable                         = "template/base/pageable.ftl";
 
-    public static final String bo_bo                                 = "template/bo/bo.ftl";
-    public static final String bo_bo_impl                            = "template/bo/bo-impl.ftl";
+    public static final String bo_bo                                 = "template/bo.ftl";
+    public static final String bo_bo_impl                            = "template/bo-impl.ftl";
 
     public static final String config_application                    = "template/config/application.properties.ftl";
 
-    public static final String dao_dao                               = "template/dao/dao.ftl";
+    public static final String dao_dao                               = "template/dao.ftl";
 
-    public static final String model_model                           = "template/model/model.ftl";
+    public static final String model_model                           = "template/model.ftl";
 
     public static final String pom                                   = "template/mvn/pom.xml.ftl";
     public static final String core_pom                              = "template/mvn/core-pom.xml.ftl";
@@ -35,15 +35,15 @@ public class FTLs {
     public static final String mybatis_mapper_mysql                  = "template/mybatis/mapper-mysql.ftl";
     public static final String mybatis_mapper_postgresql             = "template/mybatis/mapper-postgresql.ftl";
     public static final String mybatis_mybatis_config                = "template/mybatis/mybatis-config.xml.ftl";
-    public static final String mybatis_dao_dao_impl                  = "template/mybatis/dao/dao-impl.ftl";
+    public static final String mybatis_dao_dao_impl                  = "template/dao-impl.ftl";
 
-    public static final String vo_vo                                 = "template/vo/vo.ftl";
+    public static final String vo_vo                                 = "template/vo.ftl";
 
     public static final String core_config                           = "template/core/config/core-config.ftl";
 
     public static final String service_main                          = "template/service/main.ftl";
     public static final String service_jersey_config                 = "template/service/config/jersey-config.ftl";
-    public static final String service_web_config                    = "template/service/config/web-config.ftl";
+    public static final String service_web_config                    = "template/service/web-config.ftl";
     public static final String service_sample_controller             = "template/service/controller/sample-controller.ftl";
     public static final String service_page_default                  = "template/service/resolver/page-default.ftl";
     public static final String service_page_default_factory_provider = "template/service/resolver/page-default-factory-provider.ftl";
