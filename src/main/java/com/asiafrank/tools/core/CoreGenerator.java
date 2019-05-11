@@ -1,12 +1,10 @@
 package com.asiafrank.tools.core;
 
-import com.asiafrank.tools.util.ProjectInfo;
 import com.asiafrank.tools.util.*;
 import com.mysql.cj.jdbc.MysqlDataSource;
 import freemarker.cache.ClassTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateExceptionHandler;
-import org.apache.commons.lang.StringUtils;
 import org.postgresql.ds.PGSimpleDataSource;
 
 import javax.sql.DataSource;
@@ -270,7 +268,7 @@ public class CoreGenerator extends Generator {
         String[] ss = name.split("_");
         StringBuilder sb = new StringBuilder();
         for (String s : ss) {
-            sb.append(StringUtils.capitalize(s));
+            sb.append(capitalize(s));
         }
         return sb.toString();
     }
@@ -281,9 +279,9 @@ public class CoreGenerator extends Generator {
         String[] ss = name.split("_");
         StringBuilder sb = new StringBuilder();
         for (String s : ss) {
-            sb.append(StringUtils.capitalize(s));
+            sb.append(capitalize(s));
         }
-        return StringUtils.uncapitalize(sb.toString());
+        return uncapitalize(sb.toString());
     }
 
     public List<TableInfo> getTableInfo(String[] tableNames, String catalog, String schema, String[] types) {
@@ -302,14 +300,14 @@ public class CoreGenerator extends Generator {
             }
             DatabaseMetaData dbMeta = connection.getMetaData();
             if (Objects.isNull(tableNames)) {
-                ResultSet rs = connection.getMetaData().getTables(catalog, schema, "%", types);
-                fillTableInfo(tableInfoList, catalog, schema, dbMeta, rs);
-                CloseUtil.close(rs);
+                try (ResultSet rs = connection.getMetaData().getTables(catalog, schema, "%", types)) {
+                    fillTableInfo(tableInfoList, catalog, schema, dbMeta, rs);
+                }
             } else {
                 for (String tableName : tableNames) {
-                    ResultSet rs = connection.getMetaData().getTables(catalog, schema, tableName, types);
-                    fillTableInfo(tableInfoList, catalog, schema, dbMeta, rs);
-                    CloseUtil.close(rs);
+                    try (ResultSet rs = connection.getMetaData().getTables(catalog, schema, tableName, types)) {
+                        fillTableInfo(tableInfoList, catalog, schema, dbMeta, rs);
+                    }
                 }
             }
             tableInfoList.sort((o1, o2) -> {
@@ -333,29 +331,28 @@ public class CoreGenerator extends Generator {
             TableInfo tableInfo = new TableInfo();
             tableInfo.setTableName(rs.getString("TABLE_NAME"));
             log.info("Getting information for table [" + tableInfo.getTableName() + "] .");
-            ResultSet colRet = dbMeta.getColumns(catalog, schema, tableInfo.getTableName(), "%");
-            ResultSet pkRet = dbMeta.getPrimaryKeys(catalog, schema, tableInfo.getTableName());
-            Map<String, Object> primaryKeyMap = new HashMap<String, Object>();
-            while (pkRet.next()) {
-                primaryKeyMap.put(pkRet.getString("COLUMN_NAME"), null);
-            }
+            try (ResultSet colRet = dbMeta.getColumns(catalog, schema, tableInfo.getTableName(), "%");
+                 ResultSet pkRet = dbMeta.getPrimaryKeys(catalog, schema, tableInfo.getTableName())) {
+                Map<String, Object> primaryKeyMap = new HashMap<String, Object>();
+                while (pkRet.next()) {
+                    primaryKeyMap.put(pkRet.getString("COLUMN_NAME"), null);
+                }
 
-            while (colRet.next()) {
-                ColumnInfo columnInfo = new ColumnInfo();
-                columnInfo.setTableName(tableInfo.getTableName());
-                columnInfo.setColumnName(colRet.getString("COLUMN_NAME"));
-                columnInfo.setColumnType(colRet.getInt("DATA_TYPE"));
-                columnInfo.setColumnTypeName(colRet.getString("TYPE_NAME"));
-//                columnInfo.setComment((Objects.isNull(colRet.getString("REMARKS"))) ? .getColumnComment(tableInfo.getTableName(), columnInfo.getColumnName()) : colRet.getString("REMARKS"));
-                columnInfo.setLength(colRet.getInt("COLUMN_SIZE"));
-                columnInfo.setPrecision(columnInfo.getLength());
-                columnInfo.setScale(colRet.getInt("DECIMAL_DIGITS"));
-                columnInfo.setNullable("YES".equals(colRet.getString("IS_NULLABLE")));
-                columnInfo.setPrimaryKey(primaryKeyMap.containsKey(columnInfo.getColumnName()));
-                tableInfo.addColumnInfo(columnInfo.getColumnName(), columnInfo);
+                while (colRet.next()) {
+                    ColumnInfo columnInfo = new ColumnInfo();
+                    columnInfo.setTableName(tableInfo.getTableName());
+                    columnInfo.setColumnName(colRet.getString("COLUMN_NAME"));
+                    columnInfo.setColumnType(colRet.getInt("DATA_TYPE"));
+                    columnInfo.setColumnTypeName(colRet.getString("TYPE_NAME"));
+    //                columnInfo.setComment((Objects.isNull(colRet.getString("REMARKS"))) ? .getColumnComment(tableInfo.getTableName(), columnInfo.getColumnName()) : colRet.getString("REMARKS"));
+                    columnInfo.setLength(colRet.getInt("COLUMN_SIZE"));
+                    columnInfo.setPrecision(columnInfo.getLength());
+                    columnInfo.setScale(colRet.getInt("DECIMAL_DIGITS"));
+                    columnInfo.setNullable("YES".equals(colRet.getString("IS_NULLABLE")));
+                    columnInfo.setPrimaryKey(primaryKeyMap.containsKey(columnInfo.getColumnName()));
+                    tableInfo.addColumnInfo(columnInfo.getColumnName(), columnInfo);
+                }
             }
-            CloseUtil.close(colRet);
-            CloseUtil.close(pkRet);
             tableInfoList.add(tableInfo);
         }
     }
@@ -370,5 +367,17 @@ public class CoreGenerator extends Generator {
 
     public Configuration getFtlConfig() {
         return ftlConfig;
+    }
+
+    public static String capitalize(String str) {
+        char[] arr = str.toCharArray();
+        arr[0] = Character.toUpperCase(arr[0]);
+        return String.copyValueOf(arr);
+    }
+
+    public static String uncapitalize(String str) {
+        char[] arr = str.toCharArray();
+        arr[0] = Character.toLowerCase(arr[0]);
+        return String.copyValueOf(arr);
     }
 }
