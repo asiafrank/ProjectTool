@@ -1,15 +1,18 @@
 package com.asiafrank.tools;
 
-import com.asiafrank.tools.core.CoreGenerator;
 import com.mysql.cj.jdbc.MysqlDataSource;
 import freemarker.cache.ClassTemplateLoader;
 import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
 
 import javax.sql.DataSource;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
 
@@ -73,6 +76,9 @@ public class App {
             InputStream is1 = cl.getResourceAsStream("config-default.properties");
             InputStream is2 = new FileInputStream(propPath)
         ) {
+            assert is0 != null;
+            assert is1 != null;
+
             prop.load(is0);
             prop.load(is1);
             prop.load(is2);
@@ -117,20 +123,30 @@ public class App {
         String basePackage = get(ConfigKeys.base_package);
         String basePackageDir = basePackage.replace('.', '/');
 
-        // {projectPath}/{baseModuleDir}{javaSrcRelativePath}/{basePackageDir}
-        // 如: /Users/username/project/core/com/demo/core/base
-        StringBuilder baseDirSB = new StringBuilder();
-        baseDirSB.append(projectPath)
-                 .append("/")
-                 .append(baseModuleDir)
-                 .append(javaSrcRelativePath)
-                 .append("/")
-                 .append(basePackageDir);
+        // {projectPath}/{baseModuleDir}{javaSrcRelativePath}/{basePackageDir}/
+        // 如: /Users/username/project/core/com/demo/core/base/
+        String baseDir = MessageFormat.format("{0}/{1}{2}/{3}/",
+                projectPath, baseModuleDir, javaSrcRelativePath, basePackageDir);
 
-        String baseDir = baseDirSB.toString();
+        Map<Object, Object> map = new HashMap<>();
+        map.put("basePackage", basePackage);
+        createFile(baseDir + "AbstractBO.java", get(FTLKeys.base_AbstractBO), ftlConfig, map);
     }
 
     private String get(String key) {
         return prop.getProperty(key);
+    }
+
+    void createFile(String filePath,
+                    String ftlPath,
+                    Configuration ftlConfig,
+                    Map<Object, Object> map)
+    {
+        try (BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath), StandardCharsets.UTF_8))) {
+            Template template = ftlConfig.getTemplate(ftlPath);
+            template.process(map, out);
+        } catch (IOException | TemplateException e) {
+            e.printStackTrace();
+        }
     }
 }
