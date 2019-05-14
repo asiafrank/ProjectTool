@@ -1,5 +1,5 @@
 <#if jerseyStyle>
-package ${basePackageName}.service.controller;
+package ${packageName}.service.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,7 @@ public final class SampleController {
     }
 }
 <#else>
-package ${basePackageName}.service.controller;
+package ${packageName}.service.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

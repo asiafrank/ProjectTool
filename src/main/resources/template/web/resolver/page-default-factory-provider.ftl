@@ -1,6 +1,6 @@
-package ${basePackageName}.service.resolver;
+package ${packageName}.service.resolver;
 
-import ${basePackageName}.core.base.Pageable;
+import ${packageName}.core.base.Pageable;
 import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.jersey.server.internal.inject.AbstractContainerRequestValueFactory;
 import org.glassfish.jersey.server.internal.inject.AbstractValueFactoryProvider;

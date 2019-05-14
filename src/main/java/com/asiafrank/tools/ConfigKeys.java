@@ -14,6 +14,7 @@ public interface ConfigKeys {
     String  mysql_url = "mysql.url";
     String  mysql_username = "mysql.username";
     String  mysql_password = "mysql.password";
+    String  mysql_database = "mysql.database";
     String  mysql_tables = "mysql.tables";
     String  mysql_driver = "mysql.driver";
 
@@ -38,9 +39,11 @@ public interface ConfigKeys {
 
     String  model_module_dir = "model.module.dir";
     String  model_package = "model.package";
+    String  model_clazz_suffix = "model.clazz.suffix";
 
     String  vo_module_dir = "vo.module.dir";
     String  vo_package = "vo.package";
+    String  vo_clazz_suffix = "vo.clazz.suffix";
 
     String  mybatis_mapper_module_dir = "mybatis.mapper.module.dir";
     String  mybatis_mapper_dir = "mybatis.mapper.dir";

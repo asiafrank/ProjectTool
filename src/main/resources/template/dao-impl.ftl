@@ -1,13 +1,13 @@
-package ${basePackageName}.core.dao.impl;
+package ${packageName}.core.dao.impl;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import ${basePackageName}.core.base.AbstractDAO;
-import ${basePackageName}.core.dao.${modelClassSimpleName}DAO;
-import ${basePackageName}.core.model.${modelClassSimpleName};
-import ${basePackageName}.core.vo.${modelClassSimpleName}VO;
+import ${packageName}.core.base.AbstractDAO;
+import ${packageName}.core.dao.${modelClassSimpleName}DAO;
+import ${packageName}.core.model.${modelClassSimpleName};
+import ${packageName}.core.vo.${modelClassSimpleName}VO;
 
 @Repository("${modelClassSimpleName?uncap_first}DAO")
 public class MyBatis${modelClassSimpleName}DAO extends AbstractDAO<${modelClassSimpleName}, ${modelClassSimpleName}VO, ${pkType}> implements ${modelClassSimpleName}DAO {

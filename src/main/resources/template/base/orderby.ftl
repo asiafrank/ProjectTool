@@ -1,4 +1,4 @@
-package ${basePackageName};
+package ${packageName};
 
 public class OrderBy {
     private StringBuilder sb = new StringBuilder();

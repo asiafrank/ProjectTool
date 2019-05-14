@@ -1,6 +1,6 @@
-package ${basePackageName}.service.config;
+package ${packageName}.service.config;
 
-import ${basePackageName}.service.resolver.PageDefaultResolver;
+import ${packageName}.service.resolver.PageDefaultResolver;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;

@@ -1,6 +1,6 @@
-package ${basePackageName}.service.resolver;
+package ${packageName}.service.resolver;
 
-import ${basePackageName}.core.base.Pageable;
+import ${packageName}.core.base.Pageable;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;

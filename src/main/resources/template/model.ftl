@@ -1,4 +1,4 @@
-package ${basePackageName}.core.model;
+package ${packageName};
 
 import java.io.Serializable;
 <#list importList as il>

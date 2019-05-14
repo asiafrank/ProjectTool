@@ -1,4 +1,4 @@
-package ${basePackageName}.core.config;
+package ${packageName}.core.config;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 
 @Configuration
-@ComponentScan("${basePackageName}.core")
+@ComponentScan("${packageName}")
 @EnableTransactionManagement
 public class CoreConfig {
     @Bean

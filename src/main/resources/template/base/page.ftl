@@ -1,4 +1,4 @@
-package ${basePackageName};
+package ${packageName};
 
 import java.util.List;
 

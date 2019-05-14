@@ -61,7 +61,7 @@ public final class MySQLTypeUtil {
             return JavaType.TIMESTAMP;
 
         } else if (Strings.indexOfIgnoreCase(typeName, "DATETIME") != -1) {
-            return JavaType.TIMESTAMP_WITH_TIMEZONE;
+            return JavaType.TIMESTAMP;
 
         } else if (Strings.indexOfIgnoreCase(typeName, "DATE") != -1) {
             return JavaType.DATE;

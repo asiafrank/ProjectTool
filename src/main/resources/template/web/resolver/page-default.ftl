@@ -1,4 +1,4 @@
-package ${basePackageName}.service.resolver;
+package ${packageName}.service.resolver;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
