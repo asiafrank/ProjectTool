@@ -1,4 +1,4 @@
-package ${packageName};
+package ${modelPackage};
 
 import java.io.Serializable;
 <#list importList as il>

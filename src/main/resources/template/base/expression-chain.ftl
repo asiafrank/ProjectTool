@@ -1,4 +1,4 @@
-package ${packageName};
+package ${basePackage};
 
 import java.util.ArrayList;
 import java.util.List;

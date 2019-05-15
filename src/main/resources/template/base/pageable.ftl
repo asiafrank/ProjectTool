@@ -1,4 +1,4 @@
-package ${packageName};
+package ${basePackage};
 
 public class Pageable {
     private final int pageNum;

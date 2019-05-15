@@ -4,8 +4,8 @@
     "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="${modelClassSimpleName?uncap_first}DAO">
-  <resultMap id="${modelClassSimpleName?uncap_first}" type="${packageName}.core.model.${modelClassSimpleName}">
+<mapper namespace="${modelClassSimpleName?uncap_first}">
+  <resultMap id="${modelClassSimpleName?uncap_first}" type="${packageName}.${modelClassSimpleName}">
   <#list propertyNameList as propertyName>
     <result property="${propertyName}" column="${columnInfoList[propertyName_index].columnName}" />
   </#list>

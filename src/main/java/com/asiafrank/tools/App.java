@@ -21,16 +21,12 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.MessageFormat;
 import java.util.*;
 
 /**
- * TODO: 1. properties 写配置映射
- *       2. BO,DAO,VO 等后缀可以自定义
- *       3. JDBC type 映射写配置里；
- *          JDBC 连接配置写 properties;
- *          ftl 文件映射也写配置文件里
- *       4. 仅生成 BO，DAO，VO 的文件。
- *       spring-boot 基础项目 统一使用 start.spring.io 来生成
+ * TODO: 如果 modifyTime 和 createTime 是 CURRENT_TIMESTAMP 修饰这无需 写入 更新语句
+ * TODO: 抽离成 MapperGenerator，VOGenerator，ModelGenerator 等
  *
  * 操作步骤：
  * 1.去 start.spring.io 生成基础项目
@@ -131,29 +127,34 @@ public class App {
         javaResourceRelativePath = get(ConfigKeys.java_resources_relativePath);
 
         // 1.
-        //createBaseFiles(projectPath, javaSrcRelativePath);
+        createBaseFiles(projectPath, javaSrcRelativePath);
 
         // 2.,3.
         {
-            ModelFileContext fileContext = new ModelFileContext(projectPath,
+            ModelFileContext modelFileContext = new ModelFileContext(projectPath,
                                                       javaSrcRelativePath,
                                                       javaResourceRelativePath,
                                                       get(ConfigKeys.model_module_dir),
                                                       get(ConfigKeys.model_package));
+
             String tables = get(ConfigKeys.mysql_tables);
             String database = get(ConfigKeys.mysql_database);
             String[] tableNames = tables.split(",");
             List<TableInfo> tableInfoList = getTableInfo(tableNames, database, "", new String[] { "TABLE" });
             if (tableInfoList.size() > 0) {
-                String dir = fileContext.getFileDir();
+                String dir = modelFileContext.getFileDir();
                 checkAndCreateDir(dir);
                 for (TableInfo t : tableInfoList) {
 
-                    Map<Object, Object> context = getMySQLContext(fileContext, t);
+                    Map<Object, Object> context = getMySQLContext(modelFileContext, t);
 
-                    createModel(fileContext, context);
-
-                    // TODO: createMapper(fileContext, context);
+                    createModel(modelFileContext, context);
+                    createVO(modelFileContext, context);
+                    createDAO(modelFileContext, context);
+                    createDAOImpl(modelFileContext, context);
+                    createMapper(modelFileContext, context);
+                    createBO(modelFileContext, context);
+                    createBOImpl(modelFileContext, context);
                 }
             } else {
                 print("no table to create file");
@@ -177,18 +178,18 @@ public class App {
         checkAndCreateDir(dir);
 
         Map<Object, Object> map = new HashMap<>();
-        map.put("packageName", fileContext.getPackageName());
-        createFile(dir + "AbstractBO.java", get(FTLKeys.base_AbstractBO), ftlConfig, map);
-        createFile(dir + "AbstractDAO.java", get(FTLKeys.base_AbstractDAO), ftlConfig, map);
-        createFile(dir + "BO.java", get(FTLKeys.base_BO), ftlConfig, map);
-        createFile(dir + "DAO.java", get(FTLKeys.base_DAO), ftlConfig, map);
-        createFile(dir + "DAOUtils.java", get(FTLKeys.base_DAOUtils), ftlConfig, map);
-        createFile(dir + "Expression.java", get(FTLKeys.base_Expression), ftlConfig, map);
-        createFile(dir + "ExpressionChain.java", get(FTLKeys.base_ExpressionChain), ftlConfig, map);
-        createFile(dir + "Expressions.java", get(FTLKeys.base_Expressions), ftlConfig, map);
-        createFile(dir + "OrderBy.java", get(FTLKeys.base_OrderBy), ftlConfig, map);
-        createFile(dir + "Page.java", get(FTLKeys.base_Page), ftlConfig, map);
-        createFile(dir + "Pageable.java", get(FTLKeys.base_Pageable), ftlConfig, map);
+        map.put("basePackage", fileContext.getPackageName());
+        createFile(dir + "AbstractBO.java", get(FTLKeys.base_AbstractBO), map);
+        createFile(dir + "AbstractDAO.java", get(FTLKeys.base_AbstractDAO), map);
+        createFile(dir + "BO.java", get(FTLKeys.base_BO), map);
+        createFile(dir + "DAO.java", get(FTLKeys.base_DAO), map);
+        createFile(dir + "DAOUtils.java", get(FTLKeys.base_DAOUtils), map);
+        createFile(dir + "Expression.java", get(FTLKeys.base_Expression), map);
+        createFile(dir + "ExpressionChain.java", get(FTLKeys.base_ExpressionChain), map);
+        createFile(dir + "Expressions.java", get(FTLKeys.base_Expressions), map);
+        createFile(dir + "OrderBy.java", get(FTLKeys.base_OrderBy), map);
+        createFile(dir + "Page.java", get(FTLKeys.base_Page), map);
+        createFile(dir + "Pageable.java", get(FTLKeys.base_Pageable), map);
     }
 
     private void checkAndCreateDir(String dir) {
@@ -201,7 +202,7 @@ public class App {
     }
 
     /**
-     * 生成 vo，model 文件
+     * 生成 model 文件
      *
      * @param fileContext
      * @param context
@@ -209,7 +210,152 @@ public class App {
     private void createModel(ModelFileContext fileContext, Map<Object, Object> context) {
         String dir = fileContext.getFileDir();
         String javaName = fileContext.getModelClassSimpleName() + ".java";
-        createFile(dir + javaName, get(FTLKeys.model), ftlConfig, context);
+        createFile(dir + javaName, get(FTLKeys.model), context);
+    }
+
+    /**
+     * 生成 mapper xml 文件
+     *
+     * @param fileContext
+     * @param context
+     */
+    private void createMapper(ModelFileContext fileContext, Map<Object, Object> context) {
+        String moduleDir = get(ConfigKeys.mybatis_mapper_module_dir);
+        String mapperDir = get(ConfigKeys.mybatis_mapper_dir);
+
+        // {projectPath}/{moduleDir}{javaResourceRelativePath}/{mapperDir}/
+        // 如: /Users/username/project/core/src/main/resources/mapper/
+        String mapperFileDir = MessageFormat.format("{0}/{1}{2}/{3}/",
+                                                    projectPath,
+                                                    moduleDir,
+                                                    javaResourceRelativePath,
+                                                    mapperDir);
+        checkAndCreateDir(mapperFileDir);
+
+        String mapperXmlName = fileContext.getMapperSimpleName() + ".xml";
+
+        createFile(mapperFileDir + mapperXmlName, get(FTLKeys.mybatis_mapper_mysql), context);
+    }
+
+    /**
+     * 生成 VO 文件
+     *
+     * @param modelFileContext
+     * @param context
+     */
+    private void createVO(ModelFileContext modelFileContext, Map<Object, Object> context) {
+        String moduleDir = get(ConfigKeys.vo_module_dir);
+        String voPackage = get(ConfigKeys.vo_package);
+        context.put("voPackage", voPackage); // 暂时覆盖, 以后再改
+        context.put("voClassSimpleName", modelFileContext.getVoSimpleName());
+        context.put("basePackage", get(ConfigKeys.base_package));
+        context.put("modelPackage", get(ConfigKeys.model_package));
+
+        String voPackageDir = voPackage.replace('.', '/');
+        // {projectPath}/{moduleDir}{javaSrcRelativePath}/{packageDir}/
+        // 如: /Users/username/project/core/src/main/java/com/demo/core/vo/
+        String voFileDir = MessageFormat.format("{0}/{1}{2}/{3}/",
+                                                projectPath,
+                                                moduleDir,
+                                                javaSrcRelativePath,
+                                                voPackageDir);
+
+        checkAndCreateDir(voFileDir);
+
+        String voName = modelFileContext.getVoSimpleName() + ".java";
+        createFile(voFileDir + voName, get(FTLKeys.vo), context);
+    }
+
+    /**
+     * 生成 DAO 文件
+     *
+     * @param modelFileContext
+     * @param context
+     */
+    private void createDAO(ModelFileContext modelFileContext, Map<Object, Object> context) {
+        String moduleDir = get(ConfigKeys.dao_module_dir);
+        String daoPackage = get(ConfigKeys.dao_package);
+        context.put("daoPackage", daoPackage); // 暂时覆盖, 以后再改
+        context.put("daoClassSimpleName", modelFileContext.getDaoSimpleName());
+
+        String daoPackageDir = daoPackage.replace('.', '/');
+        // {projectPath}/{moduleDir}{javaSrcRelativePath}/{packageDir}/
+        // 如: /Users/username/project/core/src/main/java/com/demo/core/dao/
+        String daoFileDir = MessageFormat.format("{0}/{1}{2}/{3}/",
+                                                 projectPath,
+                                                 moduleDir,
+                                                 javaSrcRelativePath,
+                                                 daoPackageDir);
+        checkAndCreateDir(daoFileDir);
+        String daoName = modelFileContext.getDaoSimpleName() + ".java";
+        createFile(daoFileDir + daoName, get(FTLKeys.dao), context);
+    }
+
+    /**
+     * 生成 DAOImpl
+     *
+     * @param modelFileContext
+     * @param context
+     */
+    private void createDAOImpl(ModelFileContext modelFileContext, Map<Object, Object> context) {
+        String moduleDir = get(ConfigKeys.dao_impl_module_dir);
+        String daoImplPackage = get(ConfigKeys.dao_impl_package);
+
+        context.put("daoImplPackage", daoImplPackage);
+        context.put("daoImplClassSimpleName", modelFileContext.getDaoImplSimpleName());
+
+        String daoImplPackageDir = daoImplPackage.replace('.', '/');
+        // {projectPath}/{moduleDir}{javaSrcRelativePath}/{packageDir}/
+        // 如: /Users/username/project/core/src/main/java/com/demo/core/dao/
+        String daoImplFileDir = MessageFormat.format("{0}/{1}{2}/{3}/",
+                                                 projectPath,
+                                                 moduleDir,
+                                                 javaSrcRelativePath,
+                                                 daoImplPackageDir);
+        checkAndCreateDir(daoImplFileDir);
+        String daoImplName = modelFileContext.getDaoImplSimpleName() + ".java";
+        createFile(daoImplFileDir + daoImplName, get(FTLKeys.dao_impl), context);
+    }
+
+    private void createBO(ModelFileContext modelFileContext, Map<Object, Object> context) {
+        String moduleDir = get(ConfigKeys.bo_module_dir);
+        String boPackage = get(ConfigKeys.bo_package);
+
+        context.put("boPackage", boPackage);
+        context.put("boClassSimpleName", modelFileContext.getBoSimpleName());
+
+        String boPackageDir = boPackage.replace(".", "/");
+        // {projectPath}/{moduleDir}{javaSrcRelativePath}/{packageDir}/
+        // 如: /Users/username/project/core/src/main/java/com/demo/core/bo/
+        String boFileDir = MessageFormat.format("{0}/{1}{2}/{3}/",
+                                                     projectPath,
+                                                     moduleDir,
+                                                     javaSrcRelativePath,
+                                                     boPackageDir);
+
+        checkAndCreateDir(boFileDir);
+        String boName = modelFileContext.getBoSimpleName() + ".java";
+        createFile(boFileDir + boName, get(FTLKeys.bo), context);
+    }
+
+    private void createBOImpl(ModelFileContext modelFileContext, Map<Object, Object> context) {
+        String moduleDir = get(ConfigKeys.bo_impl_module_dir);
+        String boImplPackage = get(ConfigKeys.bo_impl_package);
+
+        context.put("boImplPackage", boImplPackage);
+        context.put("boImplClassSimpleName", modelFileContext.getBoImplSimpleName());
+
+        String boImplPackageDir = boImplPackage.replace(".", "/");
+        // {projectPath}/{moduleDir}{javaSrcRelativePath}/{packageDir}/
+        // 如: /Users/username/project/core/src/main/java/com/demo/core/bo/
+        String boImplFileDir = MessageFormat.format("{0}/{1}{2}/{3}/",
+                                                projectPath,
+                                                moduleDir,
+                                                javaSrcRelativePath,
+                                                boImplPackageDir);
+        checkAndCreateDir(boImplFileDir);
+        String boImplName = modelFileContext.getBoImplSimpleName() + ".java";
+        createFile(boImplFileDir + boImplName, get(FTLKeys.bo_impl), context);
     }
 
     private String get(String key) {
@@ -218,12 +364,11 @@ public class App {
 
     private void createFile(String filePath,
                     String ftlPath,
-                    Configuration ftlConfig,
-                    Map<Object, Object> map)
+                    Map<Object, Object> context)
     {
         try (BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath), StandardCharsets.UTF_8))) {
             Template template = ftlConfig.getTemplate(ftlPath);
-            template.process(map, out);
+            template.process(context, out);
         } catch (IOException | TemplateException e) {
             e.printStackTrace();
         }
@@ -237,11 +382,33 @@ public class App {
 
         String suffix = get(ConfigKeys.model_clazz_suffix);
         String modelClassSimpleName = getModelClassSimpleName(tableName, suffix);
+        String mapperSimpleName = getModelClassSimpleName(tableName, "Mapper");
+
+        String voSuffix = get(ConfigKeys.vo_clazz_suffix);
+        String voSimpleName = getModelClassSimpleName(tableName, voSuffix);
+
+        String daoSuffix = get(ConfigKeys.dao_clazz_suffix);
+        String daoSimpleName = getModelClassSimpleName(tableName, daoSuffix);
+
+        String daoImplSuffix = get(ConfigKeys.dao_impl_clazz_suffix);
+        String daoImplSimpleName = getModelClassSimpleName(tableName, daoImplSuffix);
+
+        String boSuffix = get(ConfigKeys.bo_clazz_suffix);
+        String boSimpleName = getModelClassSimpleName(tableName, boSuffix);
+
+        String boImplSuffix = get(ConfigKeys.bo_impl_clazz_suffix);
+        String boImplSimpleName = getModelClassSimpleName(tableName, boImplSuffix);
 
         fileContext.setModelClassSimpleName(modelClassSimpleName);
+        fileContext.setMapperSimpleName(mapperSimpleName);
+        fileContext.setVoSimpleName(voSimpleName);
+        fileContext.setDaoSimpleName(daoSimpleName);
+        fileContext.setDaoImplSimpleName(daoImplSimpleName);
+        fileContext.setBoSimpleName(boSimpleName);
+        fileContext.setBoImplSimpleName(boImplSimpleName);
 
         Map<Object, Object> context = new HashMap<>();
-        context.put("packageName", packageName);
+        context.put("modelPackage", packageName);
         context.put("tableName", tableName);
         context.put("modelClassSimpleName", modelClassSimpleName);
 
@@ -308,7 +475,7 @@ public class App {
             return null;
         }
 
-        List<TableInfo> tableInfoList = new ArrayList<TableInfo>();
+        List<TableInfo> tableInfoList = new ArrayList<>();
         try {
             if (Objects.isNull(types) || types.length == 0) {
                 types = new String[] { "TABLE" };

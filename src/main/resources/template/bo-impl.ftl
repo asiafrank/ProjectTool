@@ -1,22 +1,22 @@
-package ${packageName}.core.bo.impl;
+package ${boImplPackage};
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ${packageName}.core.base.AbstractBO;
-import ${packageName}.core.base.DAO;
-import ${packageName}.core.bo.${modelClassSimpleName}BO;
-import ${packageName}.core.dao.${modelClassSimpleName}DAO;
-import ${packageName}.core.model.${modelClassSimpleName};
-import ${packageName}.core.vo.${modelClassSimpleName}VO;
+import ${basePackage}.AbstractBO;
+import ${basePackage}.DAO;
+import ${boPackage}.${boClassSimpleName};
+import ${daoPackage}.${daoClassSimpleName};
+import ${modelPackage}.${modelClassSimpleName};
+import ${voPackage}.${voClassSimpleName};
 
-@Service("${modelClassSimpleName?uncap_first}BO")
-public class Default${modelClassSimpleName}BO extends AbstractBO<${modelClassSimpleName}, ${modelClassSimpleName}VO, ${pkType}> implements ${modelClassSimpleName}BO {
+@Service("${boClassSimpleName?uncap_first}")
+public class ${boImplClassSimpleName} extends AbstractBO<${modelClassSimpleName}, ${voClassSimpleName}, ${pkType}> implements ${boClassSimpleName} {
     @Autowired
-    private ${modelClassSimpleName}DAO ${modelClassSimpleName?uncap_first}DAO;
+    private ${daoClassSimpleName} ${daoClassSimpleName?uncap_first};
 
     @Override
-    protected DAO<${modelClassSimpleName}, ${modelClassSimpleName}VO, ${pkType}> getDAO() {
-        return ${modelClassSimpleName?uncap_first}DAO;
+    protected DAO<${modelClassSimpleName}, ${voClassSimpleName}, ${pkType}> getDAO() {
+        return ${daoClassSimpleName?uncap_first};
     }
 }

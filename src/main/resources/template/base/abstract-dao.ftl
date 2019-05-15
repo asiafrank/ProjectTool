@@ -1,4 +1,4 @@
-package ${packageName};
+package ${basePackage};
 
 import com.google.common.collect.Maps;
 import org.mybatis.spring.SqlSessionTemplate;

@@ -1,32 +1,32 @@
-package ${packageName}.core.vo;
+package ${voPackage};
 
 import java.util.ArrayList;
 import java.util.List;
 
-import ${packageName}.core.base.Expression;
-import ${packageName}.core.base.ExpressionChain;
-import ${packageName}.core.model.${modelClassSimpleName};
+import ${basePackage}.Expression;
+import ${basePackage}.ExpressionChain;
+import ${modelPackage}.${modelClassSimpleName};
 
-public class ${modelClassSimpleName}VO extends ${modelClassSimpleName} {
+public class ${voClassSimpleName} extends ${modelClassSimpleName} {
     private static final long serialVersionUID = 1L;
 
     private List<ExpressionChain> expressionChainList;
 
-    public ${modelClassSimpleName}VO() {
+    public ${voClassSimpleName}() {
         expressionChainList = new ArrayList<ExpressionChain>();
     }
 
-    public ${modelClassSimpleName}VO or(ExpressionChain expressionChain) {
+    public ${voClassSimpleName} or(ExpressionChain expressionChain) {
         expressionChainList.add(expressionChain);
         return this;
     }
 
-    public ${modelClassSimpleName}VO or(Expression expression) {
+    public ${voClassSimpleName} or(Expression expression) {
         expressionChainList.add(new ExpressionChain().and(expression));
         return this;
     }
 
-    public ${modelClassSimpleName}VO and(Expression expression) {
+    public ${voClassSimpleName} and(Expression expression) {
         if (expressionChainList.isEmpty()) {
             expressionChainList.add(new ExpressionChain());
         }

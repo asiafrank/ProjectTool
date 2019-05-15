@@ -58,10 +58,9 @@ public class FileContext {
         this.packageDir = packageName.replace('.', '/');
 
         // {projectPath}/{baseModuleDir}{javaSrcRelativePath}/{basePackageDir}/
-        // 如: /Users/username/project/core/com/demo/core/base/
+        // 如: /Users/username/project/core/src/main/java/com/demo/core/base/
         this.fileDir = MessageFormat.format("{0}/{1}{2}/{3}/",
                                             projectPath, moduleDir, javaSrcRelativePath, packageDir);
-
     }
 
     public String getProjectPath() {

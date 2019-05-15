@@ -1,16 +1,16 @@
-package ${packageName}.core.dao.impl;
+package ${daoImplPackage};
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import ${packageName}.core.base.AbstractDAO;
-import ${packageName}.core.dao.${modelClassSimpleName}DAO;
-import ${packageName}.core.model.${modelClassSimpleName};
-import ${packageName}.core.vo.${modelClassSimpleName}VO;
+import ${basePackage}.AbstractDAO;
+import ${daoPackage}.${daoClassSimpleName};
+import ${modelPackage}.${modelClassSimpleName};
+import ${voPackage}.${voClassSimpleName};
 
-@Repository("${modelClassSimpleName?uncap_first}DAO")
-public class MyBatis${modelClassSimpleName}DAO extends AbstractDAO<${modelClassSimpleName}, ${modelClassSimpleName}VO, ${pkType}> implements ${modelClassSimpleName}DAO {
+@Repository("${daoClassSimpleName?uncap_first}")
+public class ${daoImplClassSimpleName} extends AbstractDAO<${modelClassSimpleName}, ${voClassSimpleName}, ${pkType}> implements ${daoClassSimpleName} {
     @Autowired
     private SqlSessionTemplate sqlSessionTemplate;
 
@@ -21,6 +21,6 @@ public class MyBatis${modelClassSimpleName}DAO extends AbstractDAO<${modelClassS
 
     @Override
     protected String getNamespace() {
-        return "${modelClassSimpleName?uncap_first}DAO";
+        return "${daoClassSimpleName?uncap_first}";
     }
 }
