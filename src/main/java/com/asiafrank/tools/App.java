@@ -113,6 +113,8 @@ public class App {
     private String javaSrcRelativePath;
     private String javaResourceRelativePath;
 
+    private String tablePrefix;
+
     /**
      * 生成文件
      * 1.生成 base 文件
@@ -139,6 +141,9 @@ public class App {
 
             String tables = get(ConfigKeys.mysql_tables);
             String database = get(ConfigKeys.mysql_database);
+            tablePrefix = get(ConfigKeys.mysql_tablePrefix);
+            tablePrefix = Objects.isNull(tablePrefix) ? "" : tablePrefix;
+
             String[] tableNames = tables.split(",");
             List<TableInfo> tableInfoList = getTableInfo(tableNames, database, "", new String[] { "TABLE" });
             if (tableInfoList.size() > 0) {
@@ -453,6 +458,9 @@ public class App {
 
     private String getModelClassSimpleName(String tableName, String suffix) {
         String name = tableName.toLowerCase();
+        if (!tablePrefix.isEmpty() && name.startsWith(tablePrefix)) {
+            name = name.substring(tablePrefix.length());
+        }
         if (name.contains("_")) {
             String[] ss = name.split("_");
             StringBuilder sb = new StringBuilder();
@@ -540,9 +548,10 @@ public class App {
     }
 
     private static String getPropertyName(String columnName) {
-        String name = columnName.toLowerCase();
+        String name = columnName;
 
         if (name.contains("_")) {
+            name = name.toLowerCase();
             String[] ss = name.split("_");
             StringBuilder sb = new StringBuilder();
             for (String s : ss) {

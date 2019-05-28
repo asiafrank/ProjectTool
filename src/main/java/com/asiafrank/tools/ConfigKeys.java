@@ -16,6 +16,7 @@ public interface ConfigKeys {
     String mysql_password = "mysql.password";
     String mysql_database = "mysql.database";
     String mysql_tables = "mysql.tables";
+    String mysql_tablePrefix = "mysql.tablePrefix";
     String mysql_driver = "mysql.driver";
 
     String project_path = "project.path";
