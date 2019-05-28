@@ -120,7 +120,7 @@
 
   <sql id="sql_pagination_end">
   <![CDATA[
-    LIMIT ${r"#"}{offset}, ${r"#"}{limit}
+    LIMIT ${r"#"}{offset,javaType=Integer}, ${r"#"}{limit,javaType=Integer}
   ]]>
   </sql>
 
