@@ -32,5 +32,11 @@ vo.module.dir | vo 类生成所在的模块文件夹名
 vo.package | vo 类生成所在的包
 mybatis.mapper.module.dir | mapper xml 文件生成所在的模块文件夹名
 mybatis.mapper.dir | mapper xml 文件生成所在的文件夹名
+base.generate | 是否生成 base 文件
+bo.generate | 是否生成 bo及 boImpl 文件
+dao.generate | 是否生成 dao及 daoImpl 文件
+model.generate | 是否生成 model 文件
+vo.generate | 是否生成 vo 文件
+mybatis.mapper.generate | 是否生成 mybatis mapper 文件
 
 

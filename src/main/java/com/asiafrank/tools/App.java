@@ -129,7 +129,9 @@ public class App {
         javaResourceRelativePath = get(ConfigKeys.java_resources_relativePath);
 
         // 1.
-        createBaseFiles(projectPath, javaSrcRelativePath);
+        if (getBoolean(ConfigKeys.baseGenerate)) {
+            createBaseFiles(projectPath, javaSrcRelativePath);
+        }
 
         // 2.,3.
         {
@@ -153,13 +155,24 @@ public class App {
 
                     Map<Object, Object> context = getMySQLContext(modelFileContext, t);
 
-                    createModel(modelFileContext, context);
-                    createVO(modelFileContext, context);
-                    createDAO(modelFileContext, context);
-                    createDAOImpl(modelFileContext, context);
-                    createMapper(modelFileContext, context);
-                    createBO(modelFileContext, context);
-                    createBOImpl(modelFileContext, context);
+                    if (getBoolean(ConfigKeys.modelGenerate))
+                        createModel(modelFileContext, context);
+
+                    if (getBoolean(ConfigKeys.voGenerate))
+                        createVO(modelFileContext, context);
+
+                    if (getBoolean(ConfigKeys.daoGenerate)) {
+                        createDAO(modelFileContext, context);
+                        createDAOImpl(modelFileContext, context);
+                    }
+
+                    if (getBoolean(ConfigKeys.mybatisMapperGenerate))
+                        createMapper(modelFileContext, context);
+
+                    if (getBoolean(ConfigKeys.boGenerate)) {
+                        createBO(modelFileContext, context);
+                        createBOImpl(modelFileContext, context);
+                    }
                 }
             } else {
                 print("no table to create file");
@@ -365,6 +378,13 @@ public class App {
 
     private String get(String key) {
         return prop.getProperty(key);
+    }
+
+    private boolean getBoolean(String key) {
+        String v = prop.getProperty(key);
+        if (Objects.isNull(v))
+            return false;
+        return v.equalsIgnoreCase("true");
     }
 
     private void createFile(String filePath,
