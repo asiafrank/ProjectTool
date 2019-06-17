@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import org.mybatis.spring.SqlSessionTemplate;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -101,6 +102,9 @@ public abstract class AbstractDAO<T, VO, PK extends Serializable> implements DAO
 
     @Override
     public List<T> findByIdList(List<PK> idList, VO condition, OrderBy orderBy) {
+        if (Objects.isNull(idList) || idList.isEmpty())
+            return Collections.emptyList();
+
         Map<String, Object> params = Maps.newHashMap();
         params.put("idList", idList);
         params.put("condition", condition);
@@ -195,6 +199,9 @@ public abstract class AbstractDAO<T, VO, PK extends Serializable> implements DAO
 
     @Override
     public int updateByIdList(T entity, List<PK> idList, VO condition) {
+        if (Objects.isNull(idList) || idList.isEmpty())
+            return 0;
+
         Map<String, Object> params = Maps.newHashMap();
         params.put("entity", entity);
         params.put("idList", idList);
@@ -232,6 +239,9 @@ public abstract class AbstractDAO<T, VO, PK extends Serializable> implements DAO
 
     @Override
     public int updateByIdList(Map<String, Object> entity, List<PK> idList, VO condition) {
+        if (Objects.isNull(idList) || idList.isEmpty())
+            return 0;
+
         Map<String, Object> params = Maps.newHashMap();
         for (Map.Entry<String, Object> entry : entity.entrySet()) {
             params.put("entity_" +  entry.getKey(), entry.getValue());
@@ -265,6 +275,9 @@ public abstract class AbstractDAO<T, VO, PK extends Serializable> implements DAO
 
     @Override
     public int removeByIdList(List<PK> idList, VO condition) {
+        if (Objects.isNull(idList) || idList.isEmpty())
+            return 0;
+
         Map<String, Object> params = Maps.newHashMap();
         params.put("idList", idList);
         params.put("condition", condition);
