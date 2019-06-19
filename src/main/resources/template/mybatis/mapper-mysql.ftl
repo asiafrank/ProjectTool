@@ -52,9 +52,9 @@
       <if test="entity != null">
       <#list propertyNameList as propertyName>
       <#if propertyTypeList[propertyName_index] == "java.lang.String">
-        <if test="entity.${propertyName} != null and entity.${propertyName} != ''">,${columnInfoList[propertyName_index].columnName} = ${r"#"}{entity.${propertyName}}</if>
+        <if test="entity.${propertyName} != null and entity.${propertyName} != ''">,${columnInfoList[propertyName_index].columnName} = ${r"#"}{entity.${propertyName},javaType=${fullNamePropertyTypeList[propertyName_index]}}</if>
       <#else>
-        <if test="entity.${propertyName} != null">,${columnInfoList[propertyName_index].columnName} = ${r"#"}{entity.${propertyName}}</if>
+        <if test="entity.${propertyName} != null">,${columnInfoList[propertyName_index].columnName} = ${r"#"}{entity.${propertyName},javaType=${fullNamePropertyTypeList[propertyName_index]}}</if>
         <#if propertyName == "updatedAt">
         <if test="entity.${propertyName} == null">,${columnInfoList[propertyName_index].columnName} = NOW()</if>
         </#if>
