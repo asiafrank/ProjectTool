@@ -158,21 +158,17 @@ public class App {
                     if (getBoolean(ConfigKeys.modelGenerate))
                         createModel(modelFileContext, context);
 
-                    if (getBoolean(ConfigKeys.voGenerate))
-                        createVO(modelFileContext, context);
 
-                    if (getBoolean(ConfigKeys.daoGenerate)) {
-                        createDAO(modelFileContext, context);
-                        createDAOImpl(modelFileContext, context);
-                    }
+                    createVO(modelFileContext, context);
+
+                    createDAO(modelFileContext, context);
+                    createDAOImpl(modelFileContext, context);
 
                     if (getBoolean(ConfigKeys.mybatisMapperGenerate))
                         createMapper(modelFileContext, context);
 
-                    if (getBoolean(ConfigKeys.boGenerate)) {
-                        createBO(modelFileContext, context);
-                        createBOImpl(modelFileContext, context);
-                    }
+                    createBO(modelFileContext, context);
+                    createBOImpl(modelFileContext, context);
                 }
             } else {
                 print("no table to create file");
@@ -269,19 +265,21 @@ public class App {
         context.put("basePackage", get(ConfigKeys.base_package));
         context.put("modelPackage", get(ConfigKeys.model_package));
 
-        String voPackageDir = voPackage.replace('.', '/');
-        // {projectPath}/{moduleDir}{javaSrcRelativePath}/{packageDir}/
-        // 如: /Users/username/project/core/src/main/java/com/demo/core/vo/
-        String voFileDir = MessageFormat.format("{0}/{1}{2}/{3}/",
-                                                projectPath,
-                                                moduleDir,
-                                                javaSrcRelativePath,
-                                                voPackageDir);
+        if (getBoolean(ConfigKeys.voGenerate)) {
+            String voPackageDir = voPackage.replace('.', '/');
+            // {projectPath}/{moduleDir}{javaSrcRelativePath}/{packageDir}/
+            // 如: /Users/username/project/core/src/main/java/com/demo/core/vo/
+            String voFileDir = MessageFormat.format("{0}/{1}{2}/{3}/",
+                                                    projectPath,
+                                                    moduleDir,
+                                                    javaSrcRelativePath,
+                                                    voPackageDir);
 
-        checkAndCreateDir(voFileDir);
+            checkAndCreateDir(voFileDir);
 
-        String voName = modelFileContext.getVoSimpleName() + ".java";
-        createFile(voFileDir + voName, get(FTLKeys.vo), context);
+            String voName = modelFileContext.getVoSimpleName() + ".java";
+            createFile(voFileDir + voName, get(FTLKeys.vo), context);
+        }
     }
 
     /**
@@ -296,17 +294,19 @@ public class App {
         context.put("daoPackage", daoPackage); // 暂时覆盖, 以后再改
         context.put("daoClassSimpleName", modelFileContext.getDaoSimpleName());
 
-        String daoPackageDir = daoPackage.replace('.', '/');
-        // {projectPath}/{moduleDir}{javaSrcRelativePath}/{packageDir}/
-        // 如: /Users/username/project/core/src/main/java/com/demo/core/dao/
-        String daoFileDir = MessageFormat.format("{0}/{1}{2}/{3}/",
-                                                 projectPath,
-                                                 moduleDir,
-                                                 javaSrcRelativePath,
-                                                 daoPackageDir);
-        checkAndCreateDir(daoFileDir);
-        String daoName = modelFileContext.getDaoSimpleName() + ".java";
-        createFile(daoFileDir + daoName, get(FTLKeys.dao), context);
+        if (getBoolean(ConfigKeys.daoGenerate)) {
+            String daoPackageDir = daoPackage.replace('.', '/');
+            // {projectPath}/{moduleDir}{javaSrcRelativePath}/{packageDir}/
+            // 如: /Users/username/project/core/src/main/java/com/demo/core/dao/
+            String daoFileDir = MessageFormat.format("{0}/{1}{2}/{3}/",
+                                                     projectPath,
+                                                     moduleDir,
+                                                     javaSrcRelativePath,
+                                                     daoPackageDir);
+            checkAndCreateDir(daoFileDir);
+            String daoName = modelFileContext.getDaoSimpleName() + ".java";
+            createFile(daoFileDir + daoName, get(FTLKeys.dao), context);
+        }
     }
 
     /**
@@ -322,17 +322,19 @@ public class App {
         context.put("daoImplPackage", daoImplPackage);
         context.put("daoImplClassSimpleName", modelFileContext.getDaoImplSimpleName());
 
-        String daoImplPackageDir = daoImplPackage.replace('.', '/');
-        // {projectPath}/{moduleDir}{javaSrcRelativePath}/{packageDir}/
-        // 如: /Users/username/project/core/src/main/java/com/demo/core/dao/
-        String daoImplFileDir = MessageFormat.format("{0}/{1}{2}/{3}/",
-                                                 projectPath,
-                                                 moduleDir,
-                                                 javaSrcRelativePath,
-                                                 daoImplPackageDir);
-        checkAndCreateDir(daoImplFileDir);
-        String daoImplName = modelFileContext.getDaoImplSimpleName() + ".java";
-        createFile(daoImplFileDir + daoImplName, get(FTLKeys.dao_impl), context);
+        if (getBoolean(ConfigKeys.daoGenerate)) {
+            String daoImplPackageDir = daoImplPackage.replace('.', '/');
+            // {projectPath}/{moduleDir}{javaSrcRelativePath}/{packageDir}/
+            // 如: /Users/username/project/core/src/main/java/com/demo/core/dao/
+            String daoImplFileDir = MessageFormat.format("{0}/{1}{2}/{3}/",
+                                                         projectPath,
+                                                         moduleDir,
+                                                         javaSrcRelativePath,
+                                                         daoImplPackageDir);
+            checkAndCreateDir(daoImplFileDir);
+            String daoImplName = modelFileContext.getDaoImplSimpleName() + ".java";
+            createFile(daoImplFileDir + daoImplName, get(FTLKeys.dao_impl), context);
+        }
     }
 
     private void createBO(ModelFileContext modelFileContext, Map<Object, Object> context) {
@@ -342,18 +344,20 @@ public class App {
         context.put("boPackage", boPackage);
         context.put("boClassSimpleName", modelFileContext.getBoSimpleName());
 
-        String boPackageDir = boPackage.replace(".", "/");
-        // {projectPath}/{moduleDir}{javaSrcRelativePath}/{packageDir}/
-        // 如: /Users/username/project/core/src/main/java/com/demo/core/bo/
-        String boFileDir = MessageFormat.format("{0}/{1}{2}/{3}/",
-                                                     projectPath,
-                                                     moduleDir,
-                                                     javaSrcRelativePath,
-                                                     boPackageDir);
+        if (getBoolean(ConfigKeys.boGenerate)) {
+            String boPackageDir = boPackage.replace(".", "/");
+            // {projectPath}/{moduleDir}{javaSrcRelativePath}/{packageDir}/
+            // 如: /Users/username/project/core/src/main/java/com/demo/core/bo/
+            String boFileDir = MessageFormat.format("{0}/{1}{2}/{3}/",
+                                                    projectPath,
+                                                    moduleDir,
+                                                    javaSrcRelativePath,
+                                                    boPackageDir);
 
-        checkAndCreateDir(boFileDir);
-        String boName = modelFileContext.getBoSimpleName() + ".java";
-        createFile(boFileDir + boName, get(FTLKeys.bo), context);
+            checkAndCreateDir(boFileDir);
+            String boName = modelFileContext.getBoSimpleName() + ".java";
+            createFile(boFileDir + boName, get(FTLKeys.bo), context);
+        }
     }
 
     private void createBOImpl(ModelFileContext modelFileContext, Map<Object, Object> context) {
@@ -363,17 +367,19 @@ public class App {
         context.put("boImplPackage", boImplPackage);
         context.put("boImplClassSimpleName", modelFileContext.getBoImplSimpleName());
 
-        String boImplPackageDir = boImplPackage.replace(".", "/");
-        // {projectPath}/{moduleDir}{javaSrcRelativePath}/{packageDir}/
-        // 如: /Users/username/project/core/src/main/java/com/demo/core/bo/
-        String boImplFileDir = MessageFormat.format("{0}/{1}{2}/{3}/",
-                                                projectPath,
-                                                moduleDir,
-                                                javaSrcRelativePath,
-                                                boImplPackageDir);
-        checkAndCreateDir(boImplFileDir);
-        String boImplName = modelFileContext.getBoImplSimpleName() + ".java";
-        createFile(boImplFileDir + boImplName, get(FTLKeys.bo_impl), context);
+        if (getBoolean(ConfigKeys.boGenerate)) {
+            String boImplPackageDir = boImplPackage.replace(".", "/");
+            // {projectPath}/{moduleDir}{javaSrcRelativePath}/{packageDir}/
+            // 如: /Users/username/project/core/src/main/java/com/demo/core/bo/
+            String boImplFileDir = MessageFormat.format("{0}/{1}{2}/{3}/",
+                                                        projectPath,
+                                                        moduleDir,
+                                                        javaSrcRelativePath,
+                                                        boImplPackageDir);
+            checkAndCreateDir(boImplFileDir);
+            String boImplName = modelFileContext.getBoImplSimpleName() + ".java";
+            createFile(boImplFileDir + boImplName, get(FTLKeys.bo_impl), context);
+        }
     }
 
     private String get(String key) {
@@ -440,6 +446,7 @@ public class App {
         Set<String> importSet = new HashSet<>();
         List<String> propertyNameList = new ArrayList<>();
         List<String> propertyTypeList = new ArrayList<>();
+        List<String> fullNamePropertyTypeList = new ArrayList<>();
         List<String> columnTypeList = new ArrayList<>();
         String pkType = "";
         Collection<ColumnInfo> columnInfoList = tableInfo.getColumnInfos();
@@ -460,6 +467,12 @@ public class App {
             JavaType t = MySQLTypeUtil.getJavaType(columnTypeName);
             columnTypeList.add(t.getJdbcTypeName());
             propertyTypeList.add(t.getJavaSimpleName());
+
+            String javaTypeName = t.getJavaTypeName();
+            if (javaTypeName.startsWith("java.lang."))
+                fullNamePropertyTypeList.add(t.getJavaSimpleName());
+            else
+                fullNamePropertyTypeList.add(t.getJavaTypeName());
             importSet.add(t.getJavaTypeName());
 
             if ("id".equalsIgnoreCase(columnName)) {
@@ -470,6 +483,7 @@ public class App {
         context.put("importList", importSet.stream().sorted().toArray());
         context.put("propertyNameList", propertyNameList);
         context.put("propertyTypeList", propertyTypeList);
+        context.put("fullNamePropertyTypeList", fullNamePropertyTypeList);
         context.put("columnTypeList", columnTypeList);
         context.put("columnInfoList", columnInfoList);
         context.put("pkType", pkType);
