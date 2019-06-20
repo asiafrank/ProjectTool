@@ -32,7 +32,7 @@
     <#if propertyTypeList[propertyName_index] == "java.lang.String">
       <if test="entity.${propertyName} != null and entity.${propertyName} != ''">,${r"#"}{entity.${propertyName},javaType=java.lang.String}</if>
     <#else>
-      <if test="entity.${propertyName} != null">,${r"#"}{entity.${propertyName},javaType=${fullNamePropertyTypeList[propertyName_index]}}</if>
+      <if test="entity.${propertyName} != null">,${r"#"}{entity.${propertyName}}</if>
       <#if propertyName == "createdAt" || propertyName == "updatedAt">
       <if test="entity.${propertyName} == null">,NOW()</if>
       </#if>
@@ -52,9 +52,9 @@
       <if test="entity != null">
       <#list propertyNameList as propertyName>
       <#if propertyTypeList[propertyName_index] == "java.lang.String">
-        <if test="entity.${propertyName} != null and entity.${propertyName} != ''">,${columnInfoList[propertyName_index].columnName} = ${r"#"}{entity.${propertyName},javaType=${fullNamePropertyTypeList[propertyName_index]}}</if>
+        <if test="entity.${propertyName} != null and entity.${propertyName} != ''">,${columnInfoList[propertyName_index].columnName} = ${r"#"}{entity.${propertyName}}</if>
       <#else>
-        <if test="entity.${propertyName} != null">,${columnInfoList[propertyName_index].columnName} = ${r"#"}{entity.${propertyName},javaType=${fullNamePropertyTypeList[propertyName_index]}}</if>
+        <if test="entity.${propertyName} != null">,${columnInfoList[propertyName_index].columnName} = ${r"#"}{entity.${propertyName}}</if>
         <#if propertyName == "updatedAt">
         <if test="entity.${propertyName} == null">,${columnInfoList[propertyName_index].columnName} = NOW()</if>
         </#if>
@@ -81,7 +81,7 @@
     <#if propertyTypeList[propertyName_index] == "java.lang.String">
       <if test="condition.${propertyName} != null and condition.${propertyName} != ''">AND ${columnInfoList[propertyName_index].columnName} = ${r"#"}{condition.${propertyName},javaType=java.lang.String}</if>
     <#else>
-      <if test="condition.${propertyName} != null">AND ${columnInfoList[propertyName_index].columnName} = ${r"#"}{condition.${propertyName},javaType=${fullNamePropertyTypeList[propertyName_index]}}</if>
+      <if test="condition.${propertyName} != null">AND ${columnInfoList[propertyName_index].columnName} = ${r"#"}{condition.${propertyName}}</if>
     </#if>
     </#list>
       <if test="!condition.expressionChainList.empty">
